@@ -198,8 +198,7 @@ function resizeTabStripContent() {
     kendo.resize("#tabstrip");
     kendo.resize("#tabstrip2");
 }
-getJobs(false);
-//requestSession()
+
 
 $("#exec-table").kendoGrid({
     height: 430,

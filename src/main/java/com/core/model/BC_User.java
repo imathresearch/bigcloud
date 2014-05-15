@@ -36,10 +36,6 @@ public class BC_User implements Serializable {
 	@Email(message = "Invalid format")
 	private String eMail;
 	
-	@Size(min = 9, max = 15, message = "9-15 Numbers")
-	@Digits(fraction = 0, integer = 15, message = "Not valid")
-	private String phone1;
-	
 	@NotNull
 	@NotEmpty
 	@Size(min = 2, max = 10, message = "2-10")
@@ -88,13 +84,6 @@ public class BC_User implements Serializable {
 	public void setEMail(String eMail) {
 		this.eMail = eMail;
 	}   
-	public String getPhone1() {
-		return this.phone1;
-	}
-
-	public void setPhone1(String phone1) {
-		this.phone1 = phone1;
-	}	
 	
 	public String getPassword(){
 		return this.password;

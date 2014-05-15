@@ -33,7 +33,7 @@ function runJob(idFile){
 
 function getJobs(b) {
 	$.ajax({
-        url: "rest/job_service/getJobs/" + userName,
+        url: "http://localhost:8080/bigCloud/rest/job_service_BC/getJobs_BC/" + userName,
         cache: false,
         dataType: "json",
         type: "GET",

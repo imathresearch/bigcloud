@@ -1,5 +1,4 @@
 $(document).ready( function() {
-	console.log("EXECUTING INITIALIZATION")
 	requestSession();
 });
 
@@ -8,7 +7,7 @@ $(document).ready( function() {
  * and the initial load.
  */
 function requestSession() {
-	console.log("BEFORE AJAX CALL");
+	
 	$.ajax({
         url: "http://localhost:8080/bigCloud/rest/session_service_BC/new_BGSession/"+userName,
         cache: false,
@@ -16,6 +15,7 @@ function requestSession() {
         type: "GET",
         success: function(host) {
         	console.log("Session confirmed -" );
+        	getJobs(false);
     		
         },
         error: function(error) {

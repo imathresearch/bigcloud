@@ -1,9 +1,13 @@
 package com.core.rest;
 
 import com.api.*;
+import com.core.data.MainDB;
+import com.core.model.BC_User;
+import com.util.AuthenticUser;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,16 +28,24 @@ import javax.ws.rs.core.Response;
 @Stateful
 public class SessionService {
 	
+	@Inject private MainDB db;
+	
 	@GET
     @Path("/new_BGSession/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public StateResponse REST_requestBGSession(@PathParam("id") String userName) {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
-		boolean session = true;
+		boolean session = false;
 		System.out.println("new_BGSession");
 		try {
-			session = iMathCloud.requestSession(userName);
+			BC_User user = db.getBC_UserDB().findById(userName);
+			//One user must exist
+			if(user!= null){
+				System.out.println("name " + user.getFirstName());
+				AuthenticUser auser = new AuthenticUser(userName, "h1i1m1");
+				session = iMathCloud.requestSession(auser);
+			}
 		}
 		catch (Exception e) {
 			//LOG.severe("Error creating a session for " + userName);
