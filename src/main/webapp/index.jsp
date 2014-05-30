@@ -23,6 +23,7 @@
         <script src="bootstrap-integration/js/examples.js"></script>
         <script src="js/jobs.js" type="text/javascript"></script>
         <script src="js/initialization.js" type="text/javascript"></script>
+        <script src="js/services.js" type="text/javascript"></script>
         
         <link rel="stylesheet" href="bootstrap-integration/styles.css" />
   </head>
@@ -133,6 +134,51 @@
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">
+				<section id="service2" class="well">
+					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
+					<div class="row">
+						<div class="col-lg-5 col-sm-2">
+							<img src="bootstrap-integration/images/service_tweeter.png" class="ra-avatar img-responsive" />
+	                	</div>
+						<div class="col-lg-7 col-sm-2" style="height:120px">
+							<span class="ra-first-name">Big Data Service</span>
+							<span class="ra-last-name">Sentiment Analysis</span>
+							<div class="ra-position">Demo service for beta release </div>
+						</div>
+	                </div>
+	                <div class="row" style="height:230px">      	
+	                		<form id="SA_form" onsubmit="submitService('SA_form'); return false" accept-charset=utf-8>
+	                			<div align="center">
+									<h4>Query terms separated by comma</h4>
+									<textarea name="query_terms" rows="2" cols="30"> </textarea><br><br>
+									<h4>Tracking time (seconds)</h4>
+									<input type="text" name="tracking_time"><br><br>
+									<input type="submit" value="Submit" style="height:30px; width:100px; font-size:12pt; color:white; background-color:grey;border:3px solid black" > 
+								
+							</form >			
+					</div>
+				</section>
+			</div>
+			<div class="col-lg-8">
+				<div id="tabstrip3" class="ra-section">
+					<ul>
+						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
+						<li><span class="km-icon"></span><span class="hidden-xs">Notifications</span></li>
+					</ul>
+					<div><div id="radial-words-mood_bis"></div></div>
+					<div><div id="notifications">
+		              	<div id="appendto" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
+		              	<div id="appendto2" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
+		              	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		              	<span id="staticNotification"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row clearfix">
+			<div class="col-lg-4">
 				<section id="resources" class="well">
 					<h2 class="ra-well-title">Executed Resources</h2>
 					<div class="row">
@@ -197,6 +243,7 @@ $("#menu").kendoMenu();
 function resizeTabStripContent() {
     kendo.resize("#tabstrip");
     kendo.resize("#tabstrip2");
+    kendo.resize("#tabstrip3");
 }
 
 
@@ -215,6 +262,13 @@ $("#tabstrip").kendoTabStrip({
 });
 
 $("#tabstrip2").kendoTabStrip({
+    animation: {
+        open: { effects: "fadeIn" }
+    },
+    activate: resizeTabStripContent
+});
+
+$("#tabstrip3").kendoTabStrip({
     animation: {
         open: { effects: "fadeIn" }
     },
@@ -483,6 +537,40 @@ function initCharts(theme) {
 
 function createChart() {
     $("#radial-words-mood").kendoChart({
+        title: {
+            text: "Mood Analysis [0: Very negative, 50: Neutral, 100: Very POsitive]"
+        },
+        legend: {
+            position: "bottom"
+        },
+        seriesDefaults: {
+            type: "radarLine"
+        },
+        series: [{
+            name: "Average Mood Points",
+            data: [16, 65, 21, 75, 10, 49, 80, 16, 10, 90, 67, 76, 91, 25, 12]
+        },{
+            name: "Current Mood Points (1 week) ",
+            data: [64, 85, 97, 27, 16, 26, 35, 32, 26, 17, 10, 7, 19, 5]
+        }],
+        categoryAxis: {
+            categories: ["Santander", "JP Morgan", "La Caixa", "Credit Suisse",
+                "Goldman Sachs", "Bankia", "Catalunya Caixa", "UBS",
+                "Banesto", "Banc Sabadell", "BBVA", "Deutsche Bank",
+                "Barclays", "Citigroup", "Bankinter"]
+        },
+        valueAxis: {
+            labels: {
+                format: "{0}"
+            }
+        },
+        tooltip: {
+            visible: true,
+            format: "{0} ptn"
+        }
+    });
+
+    $("#radial-words-mood_bis").kendoChart({
         title: {
             text: "Mood Analysis [0: Very negative, 50: Neutral, 100: Very POsitive]"
         },
