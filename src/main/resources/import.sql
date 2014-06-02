@@ -18,3 +18,8 @@
 -- You can use this file to load seed data into the database using SQL statements
 
 insert into BC_user (username, firstname, lastname, organization, email, password) values ('ammartinez', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@imathresearch.com','h1i1m1');
+
+insert into Service (id, name, description) values (1 , 'Twitter Sentiment Analysis', 'Analyses the sentiment of tweets that match a specific term');
+insert into Service (id, name, description) values (2 , 'Sales Prediction', 'Predicts the sales of several regions');
+
+insert into Service_Instance (id, idService, idUser) values (1, 1, 'ammartinez');

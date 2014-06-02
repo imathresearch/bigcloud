@@ -27,7 +27,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.core.data.MainDB;
+import com.core.model.Execution;
 import com.core.service.TwitterController;
+import com.core.util.BigCloudResponse;
 
 
 
@@ -50,24 +52,61 @@ public class ServiceService {
     @Path("/submitService/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public void REST_submitService(String json_params) {
+    public BigCloudResponse.ServiceDTO REST_submitService(String json_params) {
 		
-		System.out.println("Received params " + json_params);
+		try{
+			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
+	    	MyMap <String, String> mm = new MyMap<String, String>();   	
+	    	mm.jsonToMap(json_params);
+	    	    	
+	    	String service_name = mm.getValue("service");
+	    	switch(service_name){
+	    		case "SAForm":
+	    			Long id_ServiceInstance = Long.parseLong(mm.getValue("instance"));
+	    			String query_terms = mm.getValue("query_terms");
+	    			Long track_time = Long.parseLong(mm.getValue("track_time"));
+	    			out = tc.run_SentimentAnalysis(id_ServiceInstance, query_terms, track_time);
+	    			System.out.println("Confirmation run_SentimentAnalysis ");
+	    			break;
+	    		default:
+	    			System.out.println("Unknown Service");
+	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+	    			//break;   				
+	    	}
+	    	return out;
+    	
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.BAD_REQUEST);
+		}
 		
-    	MyMap <String, String> mm = new MyMap<String, String>();   	
-    	mm.jsonToMap(json_params);
+	}
+	
+	@GET
+    @Path("/executionState/{idService}/{idExecution}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BigCloudResponse.ServiceDTO REST_getServiceState(@PathParam("idExecution") Long idExecution ) {
+		
+		try{
+			Execution ex = db.getExecutionDB().findById(idExecution);
+			String name_service = ex.getServiceInstance().getService().getName();
+			
+			switch(name_service){
+				case "Twitter Sentiment Analysis":
+					tc.getExecutionState(idExecution);
+					break;
+					
+				default:
+					System.out.println("Unknown Service");
+	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+					
+			}
     	
-    	
-    	String service_name = mm.getValue("service");
-    	
-    	switch(service_name){
-    		case "SA_form":
-    			//tc.run_SentimentAnalysis(mm);
-    			break;
-    		default:
-    			System.out.println("Unknown Service");
-    			break;   				
-    	}
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.BAD_REQUEST);
+		}
 		
 	}
 	

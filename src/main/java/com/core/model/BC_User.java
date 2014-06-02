@@ -52,7 +52,7 @@ public class BC_User implements Serializable {
 	public String getUserName() {
 		return this.userName;
 	}
-
+ 
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}   

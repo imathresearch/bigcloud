@@ -147,10 +147,10 @@
 						</div>
 	                </div>
 	                <div class="row" style="height:230px">      	
-	                		<form id="SA_form" onsubmit="submitService('SA_form'); return false" accept-charset=utf-8>
+	                		<form id="SAForm_1" onsubmit="submitService('SAForm_1'); return false" accept-charset=utf-8>
 	                			<div align="center">
 									<h4>Query terms separated by comma</h4>
-									<textarea name="query_terms" rows="2" cols="30"> </textarea><br><br>
+									<textarea name="query_terms" rows="2" cols="30"></textarea><br><br>
 									<h4>Tracking time (seconds)</h4>
 									<input type="text" name="tracking_time"><br><br>
 									<input type="submit" value="Submit" style="height:30px; width:100px; font-size:12pt; color:white; background-color:grey;border:3px solid black" > 
