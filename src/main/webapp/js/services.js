@@ -1,3 +1,5 @@
+var STATE = {CREATED:0, RUNNING:1, PAUSED:2, CANCELLED:3, FINISHED_OK:4, FINISHED_ERROR:5};
+
 function submitService(form_id){
 	console.log(form_id);
 	var id_split = form_id.split('_');
@@ -20,7 +22,6 @@ function submitService_SentimentAnalysis(form_id){
 	console.log(time);
 	
 	var id_split = form_id.split('_');
-	key_service = id_split[0];
 	var SA_param = {
             service: id_split[0],
             instance : id_split[1],
@@ -36,7 +37,7 @@ function submitService_SentimentAnalysis(form_id){
 		data : JSON.stringify(SA_param),
         type: "POST",
         success: function(service_state) {
-        	console.log("Success");
+        	processServiceState(SA_param, service_state);
         },
         error: function(error) {
             console.log("Possible error submitting Service -" + error.status);
@@ -44,30 +45,27 @@ function submitService_SentimentAnalysis(form_id){
     });	
 }
 
-function onSucess(key_service, service_state){
-	
-	if (key_service == "SAForm") {
-		var id = setInterval(function () {
-			
-			state = getExecutionState(idExecution);
-			if(state == FINISHED_OK)
-				//get Job Result
-				//plot
-				clearInterval(id);
-			if(state == FINISHED_ERROR)
-				//say something
-				clearInterval(id);
- 			
+function processServiceState(params, service_state){
 
-		}, 100);
-			
-	};
+	var idExecution = service_state.idExecution;
+	if (service_state.state == STATE.RUNNING){
+		setTimeout(function ({
+			getExecutionState(params, idExecution);
+		}, 10000);
+	}
 	
-	
-	
+	switch (params.service){
+		case "SAForm":
+			updateSAServiceUI(params, service_state);
+			break;
+		default:
+			console.log("Unknown service key " + params.service);
+			break;
+	}
+		
 }
 
-function getExecutionState(idExecution){
+function getExecutionState(params, idExecution){
 	
 	$.ajax({
         url: "rest/service_service/executionState/" + idExecution,
@@ -75,8 +73,8 @@ function getExecutionState(idExecution){
         dataType: "json",
 		contentType: "application/json; charset=utf-8",
         type: "GET",
-        success: function(state) {
-        	console.log("Success");
+        success: function(service_state) {
+        	processServiceState(params, service_state);
         },
         error: function(error) {
             console.log("Possible error discovering the state of the execution -" + idExecution+ " " +  error.status);
@@ -84,3 +82,51 @@ function getExecutionState(idExecution){
     });	
 		
 }
+
+function updateSAServiceUI(params, service_state){
+
+	switch (service_state.state){
+		case "RUNNING":
+			//plot RUNNING
+			break;
+		case "FINISHED_OK":
+			getServiceData(params, idExecution);
+			break;
+		case "FINISHED_ERROR":
+			break;
+		default:
+			console.log("Unknown state " + service_state.state);				
+	}
+
+}
+
+function getServiceData(params, idExecution){
+	
+	$.ajax({
+        url: "rest/service_service/getServiceData/" + idExecution,
+        cache: false,
+        dataType: "json",
+		contentType: "application/json; charset=utf-8",
+        type: "GET",
+        success: function(data) {
+        	processServiceData(params, data);
+        },
+        error: function(error) {
+            console.log("Possible error discovering the state of the execution -" + idExecution+ " " +  error.status);
+        },
+    });	
+		
+}
+
+function processServiceData(params, data){
+
+	switch (params.service){
+		case "SAForm":
+			//plot the data
+			break;
+		default:
+			console.log("Unknown service " + params.service);
+	}
+	
+}
+
