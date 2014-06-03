@@ -93,7 +93,7 @@ function updateSAServiceUI(params, service_state){
 			break;
 		case STATE.FINISHED_OK:
 			console.log("The service finished ok");
-			//getServiceData(params, idExecution);
+			getServiceData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
 			console.log("The service finished with errors");
@@ -114,10 +114,10 @@ function getServiceData(params, idExecution){
 		contentType: "application/json; charset=utf-8",
         type: "GET",
         success: function(data) {
-        	processServiceData(params, data);
+        	console.log("on success getServiceData")
         },
         error: function(error) {
-            console.log("Possible error discovering the state of the execution - " + idExecution+ " " +  error.status);
+            console.log("Possible error getting data of the execution - " + idExecution+ " " +  error.status);
         },
     });	
 		

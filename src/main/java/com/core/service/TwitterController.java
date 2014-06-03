@@ -7,13 +7,18 @@ import com.core.model.Service_Instance;
 import com.core.util.*;
 import com.util.AuthenticUser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,11 +49,9 @@ public class TwitterController extends AbstractController {
 		System.out.println("user " + instance.getUser().getUserName());
 		//1. Create a new file that represents the job to be executed
 		
-		//1.1 Copy the template file to the correct location and with another name
-		File job_file = SA_createJobFileService(instance);
-		
-		//1.2 Change label in the file by the parameters.
-		//TODO
+		//1.1 Copy the template file to the correct location, with another name and parameterised
+		String quote_query = "\""+query_terms+"\"";
+		File job_file = SA_createJobFileService(instance, quote_query, track_time);
 				
 		//2. Upload file to iMathCloud. Get idFile
 		//3. Submit job. Get idJob
@@ -121,7 +124,82 @@ public class TwitterController extends AbstractController {
 		return out;
 	}
 	
-	public File SA_createJobFileService(Service_Instance s) throws IOException{
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public BigCloudResponse.ServiceDTO getExecutionData(Long idExecution) throws Exception{
+		
+		//1. First we find the imathCloud job associated to the execution
+		Execution ex = db.getExecutionDB().findById(idExecution);
+		Long imathCloud_idJob = ex.getJob().getIdiMathCloud();
+		
+		//2. Create the user to be authenthicated in the rest call of iMathCloud
+		AuthenticUser auser = new AuthenticUser(ex.getServiceInstance().getUser().getUserName(), ex.getServiceInstance().getUser().getPassword());
+		
+		//3. Get the outputfiles associated to the job
+		Map<String, Long> list_files = new HashMap<String, Long>(); 
+		try{
+			list_files = iMathCloud.getJobOutputFiles(auser, imathCloud_idJob);
+		}
+		catch (iMathAPIException e){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		catch (IOException e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		
+		//4. The [idiMathJob_job_file_name.out] outputfile contains the interesting data
+		//4.1 Obtain the full name of the job (includes the complete path)
+		String job_full_file_name = ex.getJob().getName();
+		//4.2 Take only the name of the file that represents the job
+		String [] full_name_split = job_full_file_name.split("/");
+		String file_name = full_name_split[full_name_split.length-1];
+		//4.3 Build the name of the .out file, which depends of the job id of iMathCloud
+		String outputfile_name = String.valueOf(ex.getJob().getIdiMathCloud()) + "_" + file_name.replaceAll(".py$", ".out");
+		
+		//5. Get id of .out file
+		Long id_outputfile = list_files.get(outputfile_name);
+		
+		//6. Get content of the output file. A string per line
+		// In the case of sentiment analysis, the content represents is a dictionary, where each key 
+		// represent a query terms and has associated a list of sentiment associated to
+		// each gathered tweet. It is in only one line
+		List<String> content; 
+		try{
+			content = iMathCloud.getFileContent(auser, id_outputfile);
+		}
+		catch(Exception e){
+			throw e;
+		}
+		
+		Map<String, Float> processed_data = SA_processSentimentData(content.get(0));
+		
+		
+		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());
+		
+		return out;
+	}
+	
+	public Map<String, Float> SA_processSentimentData(String raw_data){
+		
+		MapUtils.MyMap<String, List<Float>> mm = new MapUtils.MyMap<String, List<Float>>();
+		mm.jsonToMap(raw_data);
+		
+		Map<String, Float> output_map = new HashMap<String, Float>();
+		Float count, mean;
+		for (String key : mm.getMap().keySet()){
+			List<Float> list_sentimentScore = mm.getMap().get(key);
+			count = 0F;
+			for(Float f: list_sentimentScore){
+				count += f;
+			}
+			mean = count/list_sentimentScore.size();
+			output_map.put(key, mean);
+		}
+		
+		return output_map;
+		
+	}
+	
+	public File SA_createJobFileService(Service_Instance s, String query_terms, Long track_time) throws IOException{
 		
 		Constants C = new Constants();
 		File f_src = new File(C.JOB_SA_TEMPLATE);
@@ -130,7 +208,29 @@ public class TwitterController extends AbstractController {
 		String name_dst = String.valueOf(s.getId()) + "_" + s.getUser().getUserName() + uid;
 		File f_dst = new File (C.JOBS_FILES_DIR + "/" + name_dst + ".py");		
 		
-		FileUtils.copyFiles(f_src, f_dst);
+		//FileUtils.copyFiles(f_src, f_dst);
+		
+		BufferedReader reader = new BufferedReader(new FileReader(f_src));
+		StringBuffer buffer = new StringBuffer();
+		String line;
+		while((line = reader.readLine()) != null) {
+		    buffer.append(line);
+		    buffer.append("\r\n");
+		}
+		reader.close();
+
+		Map<String, String> ReplacementMap = new HashMap<String, String>();
+		ReplacementMap.put("<<QUERY>>", query_terms);
+		ReplacementMap.put("<<TIME>>", String.valueOf(track_time));
+
+		String toWrite = buffer.toString();
+		for (Map.Entry<String, String> entry : ReplacementMap.entrySet()) {
+		    toWrite = toWrite.replaceAll(entry.getKey(), entry.getValue());
+		}
+
+		FileWriter writer = new FileWriter(f_dst.getPath());
+		writer.write(toWrite);
+		writer.close();
 		
 		return f_dst;
 		

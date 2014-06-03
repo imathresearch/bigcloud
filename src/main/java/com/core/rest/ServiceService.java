@@ -30,6 +30,7 @@ import com.core.data.MainDB;
 import com.core.model.Execution;
 import com.core.service.TwitterController;
 import com.core.util.BigCloudResponse;
+import com.core.util.MapUtils;
 
 
 
@@ -56,7 +57,7 @@ public class ServiceService {
 		
 		try{
 			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
-	    	MyMap <String, String> mm = new MyMap<String, String>();   	
+	    	MapUtils.MyMap <String, String> mm = new MapUtils.MyMap<String, String>();   	
 	    	mm.jsonToMap(json_params);
 	    	    	
 	    	String service_name = mm.getValue("service");
@@ -116,41 +117,35 @@ public class ServiceService {
 		
 	}
 	
-	/**
-     * Generic HashMap Class that can be used to manage the params received as a json string
-     * @throws IOException
-     */
-    public class MyMap <T,A> {
+	@GET
+    @Path("/getServiceData/{idExecution}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BigCloudResponse.ServiceDTO REST_getServiceData(@PathParam("idExecution") Long idExecution ) {
+		
+		try{
+			Execution ex = db.getExecutionDB().findById(idExecution);
+			String name_service = ex.getServiceInstance().getService().getName();
+			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
+			switch(name_service){
+				case "Twitter Sentiment Analysis":
+					out = tc.getExecutionData(idExecution);
+					break;				
+				default:
+					System.out.println("Unknown Service");
+	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+					
+			}
+			return out;
     	
-		Map <T,A> mymap;
-	
-		public MyMap(){
-			mymap = new HashMap<T,A>();
 		}
-	
-		public Map<T,A> getMap(){
-			return this.mymap;
+		catch(WebApplicationException e){
+			throw e;
 		}
-	
-		public A getValue(T key){
-			return this.mymap.get(key);
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
-	
-		public void setValue(T key, A value){
-			this.mymap.put(key, value);
-		}
-	
-		public void jsonToMap(String json){
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				this.mymap = mapper.readValue(json, 
-				    new TypeReference<HashMap<T,A>>(){});
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
+		
 	}
-
 	
 }
