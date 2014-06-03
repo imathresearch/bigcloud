@@ -1,4 +1,4 @@
-var STATE = {CREATED:0, RUNNING:1, PAUSED:2, CANCELLED:3, FINISHED_OK:4, FINISHED_ERROR:5};
+var STATE = {CREATED:"CREATED", RUNNING:"RUNNING", PAUSED:"PAUSED", CANCELLED:"CANCELLED", FINISHED_OK:"FINISHED_OK", FINISHED_ERROR:"FINISHED_ERROR"};
 
 function submitService(form_id){
 	console.log(form_id);
@@ -37,6 +37,8 @@ function submitService_SentimentAnalysis(form_id){
 		data : JSON.stringify(SA_param),
         type: "POST",
         success: function(service_state) {
+        	console.log("success of submitservice");
+        	console.log(service_state.state);
         	processServiceState(SA_param, service_state);
         },
         error: function(error) {
@@ -49,7 +51,7 @@ function processServiceState(params, service_state){
 
 	var idExecution = service_state.idExecution;
 	if (service_state.state == STATE.RUNNING){
-		setTimeout(function ({
+		setTimeout(function (){
 			getExecutionState(params, idExecution);
 		}, 10000);
 	}
@@ -86,16 +88,19 @@ function getExecutionState(params, idExecution){
 function updateSAServiceUI(params, service_state){
 
 	switch (service_state.state){
-		case "RUNNING":
-			//plot RUNNING
+		case STATE.RUNNING:
+			console.log("The service is running");
 			break;
-		case "FINISHED_OK":
-			getServiceData(params, idExecution);
+		case STATE.FINISHED_OK:
+			console.log("The service finished ok");
+			//getServiceData(params, idExecution);
 			break;
-		case "FINISHED_ERROR":
+		case STATE.FINISHED_ERROR:
+			console.log("The service finished with errors");
 			break;
 		default:
-			console.log("Unknown state " + service_state.state);				
+			console.log("Unknown state " + service_state.state);
+			break;
 	}
 
 }
@@ -112,7 +117,7 @@ function getServiceData(params, idExecution){
         	processServiceData(params, data);
         },
         error: function(error) {
-            console.log("Possible error discovering the state of the execution -" + idExecution+ " " +  error.status);
+            console.log("Possible error discovering the state of the execution - " + idExecution+ " " +  error.status);
         },
     });	
 		

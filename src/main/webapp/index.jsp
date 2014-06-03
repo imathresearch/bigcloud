@@ -163,16 +163,10 @@
 				<div id="tabstrip3" class="ra-section">
 					<ul>
 						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
-						<li><span class="km-icon"></span><span class="hidden-xs">Notifications</span></li>
+						
 					</ul>
 					<div><div id="radial-words-mood_bis"></div></div>
-					<div><div id="notifications">
-		              	<div id="appendto" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
-		              	<div id="appendto2" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
-		              	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-		              	<span id="staticNotification"></span>
-						</div>
-					</div>
+	
 				</div>
 			</div>
 		</div>

@@ -21,8 +21,11 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import com.api.iMathCloud;
+import com.exception.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -31,11 +34,9 @@ public class TwitterController extends AbstractController {
 	@Inject private MainDB db;
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception{
+	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception {
 		
 		System.out.println("Running run_SentimentAnalysis");
-		Constants C = new Constants();
-		
 		
 		Service_Instance instance = db.getServiceInstanceDB().findById(id_ServiceInstance);
 		AuthenticUser auser = new AuthenticUser(instance.getUser().getUserName(), instance.getUser().getPassword());
@@ -50,11 +51,17 @@ public class TwitterController extends AbstractController {
 		//TODO
 				
 		//2. Upload file to iMathCloud. Get idFile
-		Long idFile = iMathCloud.uploadFile(auser, job_file.getPath(), "");
-		
 		//3. Submit job. Get idJob
-		Long idJob = iMathCloud.runPythonJob(auser, idFile);
-		
+		Long idFile = 0L;
+		Long idJob = 0L;
+		try{
+			idFile = iMathCloud.uploadFile(auser, job_file.getPath(), "");
+			idJob = iMathCloud.runPythonJob(auser, idFile);
+		}
+		catch (IOException | iMathAPIException e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+			
 		//4.Persist the job Object and the execution Object
 		BC_Job job = new BC_Job();
 		job.setIdiMathCloud(idJob);
@@ -72,25 +79,44 @@ public class TwitterController extends AbstractController {
 		ex.setConfiguration(string_m);
 		db.makePersistent(ex);
 		
-		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), job.getId(), ex.getState().name());
+		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), job.getId(), ex.getState());
 		return out;	
 		
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BigCloudResponse.ServiceDTO getExecutionState(Long idExecution) throws Exception{
 		
+		System.out.println("Function getExecutionState");
 		
+		//1. First we find the imathCloud job associated to the execution
 		Execution ex = db.getExecutionDB().findById(idExecution);
 		Long imathCloud_idJob = ex.getJob().getIdiMathCloud();
 		
+		System.out.println("Execution initial state " + ex.getState().ordinal());
+		
+		//2. Create the user to be authenthicated in the rest call of iMathCloud
 		AuthenticUser auser = new AuthenticUser(ex.getServiceInstance().getUser().getUserName(), ex.getServiceInstance().getUser().getPassword());
 		
-		String state = iMathCloud.getJobState(auser, idExecution);
+		//3. Get the state associated to the job
+		String state; 
+		try{
+			state = iMathCloud.getJobState(auser, imathCloud_idJob);
+		}
+		catch (iMathAPIException e){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		catch (IOException e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
 		
-		//ex.setState(state);
-		db.makePersistent(ex);
+		//4. Update the state of the execution according to the state of the job
+		ex.setState(Execution.States.valueOf(state));
+		//db.makePersistent(ex);
 		
-		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState().name());
+		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());
+		
+		System.out.println("Execution final state " + ex.getState().ordinal());
 		
 		return out;
 	}

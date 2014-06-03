@@ -76,14 +76,17 @@ public class ServiceService {
 	    	return out;
     	
 		}
+		catch(WebApplicationException e){
+			throw e;
+		}
 		catch(Exception e){
-			throw new WebApplicationException(Response.Status.BAD_REQUEST);
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
 	
 	@GET
-    @Path("/executionState/{idService}/{idExecution}")
+    @Path("/executionState/{idExecution}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
     public BigCloudResponse.ServiceDTO REST_getServiceState(@PathParam("idExecution") Long idExecution ) {
@@ -91,21 +94,24 @@ public class ServiceService {
 		try{
 			Execution ex = db.getExecutionDB().findById(idExecution);
 			String name_service = ex.getServiceInstance().getService().getName();
-			
+			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
 			switch(name_service){
 				case "Twitter Sentiment Analysis":
-					tc.getExecutionState(idExecution);
-					break;
-					
+					out = tc.getExecutionState(idExecution);
+					break;				
 				default:
 					System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
 					
 			}
+			return out;
     	
 		}
+		catch(WebApplicationException e){
+			throw e;
+		}
 		catch(Exception e){
-			throw new WebApplicationException(Response.Status.BAD_REQUEST);
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
