@@ -40,7 +40,7 @@ function getJobs(b) {
         success: function(jobs) {
 			fillJobs(jobs);
 			if (b) {
-				$( "#jobsXML" ).footable();
+				//$( "#jobsXML" ).footable();
 			}
 			setDefaultLanguage(mathLanguageCode);
         },
@@ -241,7 +241,7 @@ function plotStatDescriptiveInTab(files,idJob) {
 function refreshJobsTable() {
 	$("#jobsTBODY").remove();
 	var aux = '<tbody id="jobsTBODY"></tbody>';
-	$("#jobsXML").append(aux);
+	$("#exec-table").append(aux);
 	getJobs(false);
 }
 

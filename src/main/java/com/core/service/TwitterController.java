@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,7 +61,13 @@ public class TwitterController extends AbstractController {
 		Long idJob = 0L;
 		try{
 			idFile = iMathCloud.uploadFile(auser, job_file.getPath(), "");
+			Calendar cal = Calendar.getInstance();
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                DateFormat.MEDIUM);
+
+            System.out.println("TIME --- "  + df.format(cal.getTime()));
 			idJob = iMathCloud.runPythonJob(auser, idFile);
+            System.out.println("TIME --- "  + df.format(cal.getTime()));
 		}
 		catch (IOException | iMathAPIException e){
 			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -115,7 +123,6 @@ public class TwitterController extends AbstractController {
 		
 		//4. Update the state of the execution according to the state of the job
 		ex.setState(Execution.States.valueOf(state));
-		//db.makePersistent(ex);
 		
 		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());
 		
@@ -170,25 +177,24 @@ public class TwitterController extends AbstractController {
 			throw e;
 		}
 		
-		Map<String, Float> processed_data = SA_processSentimentData(content.get(0));
+		Map<String, Double> processed_data = SA_processSentimentData(content.get(0));		
 		
-		
-		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());
+		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState(), processed_data);
 		
 		return out;
 	}
 	
-	public Map<String, Float> SA_processSentimentData(String raw_data){
+	public Map<String, Double> SA_processSentimentData(String raw_data){
 		
-		MapUtils.MyMap<String, List<Float>> mm = new MapUtils.MyMap<String, List<Float>>();
+		MapUtils.MyMap<String, List<Double>> mm = new MapUtils.MyMap<String, List<Double>>();
 		mm.jsonToMap(raw_data);
 		
-		Map<String, Float> output_map = new HashMap<String, Float>();
-		Float count, mean;
+		Map<String, Double> output_map = new HashMap<String, Double>();
+		Double count, mean;
 		for (String key : mm.getMap().keySet()){
-			List<Float> list_sentimentScore = mm.getMap().get(key);
-			count = 0F;
-			for(Float f: list_sentimentScore){
+			List<Double> list_sentimentScore = mm.getMap().get(key);
+			count = 0D;
+			for(Double f: list_sentimentScore){
 				count += f;
 			}
 			mean = count/list_sentimentScore.size();

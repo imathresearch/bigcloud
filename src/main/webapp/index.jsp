@@ -26,6 +26,7 @@
         <script src="js/services.js" type="text/javascript"></script>
         
         <link rel="stylesheet" href="bootstrap-integration/styles.css" />
+        <link rel="stylesheet" href="css/service.css" />
   </head>
   <body>
          <header>
@@ -153,7 +154,7 @@
 									<textarea name="query_terms" rows="2" cols="30"></textarea><br><br>
 									<h4>Tracking time (seconds)</h4>
 									<input type="text" name="tracking_time"><br><br>
-									<input type="submit" value="Submit" style="height:30px; width:100px; font-size:12pt; color:white; background-color:grey;border:3px solid black" > 
+									<input type="submit" value="Submit" class="btn btn-primary" > 
 								
 							</form >			
 					</div>
@@ -165,7 +166,11 @@
 						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
 						
 					</ul>
-					<div><div id="radial-words-mood_bis"></div></div>
+					<div style="height:400px">
+						<div id="radial-words-mood_1"></div>
+						<div class="execution-status" id="execution-status_1"></div>
+						<div class="execution-status-print" id="execution-status-print_1"></div>
+					</div>
 	
 				</div>
 			</div>

@@ -18,16 +18,23 @@ function submitService_SentimentAnalysis(form_id){
 	
 	var terms = $('#'+form_id).find('textarea[name="query_terms"]').val();
 	var time = $('#'+form_id).find('input[name="tracking_time"]').val();
-	console.log(terms);
+	
 	console.log(time);
+	
+	var clean_terms = terms.replace(/^\s+|\s+$/g, "").replace(/\s*,\s*/g, ",");
+	console.log(clean_terms);
 	
 	var id_split = form_id.split('_');
 	var SA_param = {
             service: id_split[0],
             instance : id_split[1],
-            query_terms: terms,
+            query_terms: clean_terms,
             track_time: time
     };
+	
+	$('#execution-status_' + SA_param.instance).hide();	
+	$("#radial-words-mood_" + SA_param.instance).hide();
+	$('#execution-status-print_' + SA_param.instance).hide();
 	
 	$.ajax({
         url: "rest/service_service/submitService",
@@ -39,6 +46,7 @@ function submitService_SentimentAnalysis(form_id){
         success: function(service_state) {
         	console.log("success of submitservice");
         	console.log(service_state.state);
+        	refreshJobsTable();
         	processServiceState(SA_param, service_state);
         },
         error: function(error) {
@@ -90,9 +98,14 @@ function updateSAServiceUI(params, service_state){
 	switch (service_state.state){
 		case STATE.RUNNING:
 			console.log("The service is running");
+			$('#execution-status_' + params.instance).show();
+			$('#execution-status_' + params.instance).html('Service Running!!<br><span class="glyphicon glyphicon-time bigglyph"></span>');			
 			break;
 		case STATE.FINISHED_OK:
 			console.log("The service finished ok");
+			$('#execution-status-print_' + params.instance).show();
+			$('#execution-status-print_' + params.instance).html('Service Finished!!');
+			refreshJobsTable();
 			getServiceData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
@@ -113,8 +126,9 @@ function getServiceData(params, idExecution){
         dataType: "json",
 		contentType: "application/json; charset=utf-8",
         type: "GET",
-        success: function(data) {
-        	console.log("on success getServiceData")
+        success: function(service_state) {
+        	console.log("on success getServiceData");
+        	plotDataService(params, service_state);
         },
         error: function(error) {
             console.log("Possible error getting data of the execution - " + idExecution+ " " +  error.status);
@@ -123,15 +137,65 @@ function getServiceData(params, idExecution){
 		
 }
 
-function processServiceData(params, data){
-
+function plotDataService(params, service_state){
+	
 	switch (params.service){
 		case "SAForm":
-			//plot the data
+			plot_SA(params, service_state);
 			break;
 		default:
-			console.log("Unknown service " + params.service);
+			console.log("Unknown service key " + params.service);
+			break;
+	}
+}
+
+function plot_SA(params, service_state){
+	
+	console.log("IN plot_SA");
+	
+	var categories = params.query_terms.split(",");
+	
+	console.log(service_state.dataResult);
+	var x;
+	var dataResult = [];
+	for (x=0;x<categories.length;x++){
+		console.log(categories[x]);
+		dataResult.push(service_state.dataResult[categories[x]]*100);
+		console.log(service_state.dataResult[categories[x]]*100);
 	}
 	
+	$('#execution-status_' + params.instance).hide();
+	$("#radial-words-mood_" + params.instance).show();
+	$("#radial-words-mood_" + params.instance).kendoChart({
+	        title: {
+	            text: "Mood Analysis [0: Very negative, 50: Neutral, 100: Very Positive]"
+	        },
+	        chartArea: {
+	            background: "transparent"
+	        },
+	        legend: {
+	            position: "bottom"
+	        },
+	        seriesDefaults: {
+	            type: "radarLine"
+	        },
+	        series: [{
+	            name: "Average Mood Points",
+	            data: dataResult
+	        }],
+	        categoryAxis: {
+	            categories: categories
+	        },
+	        valueAxis: {
+	            labels: {
+	                format: "{0}"
+	            }
+	        },
+	        tooltip: {
+	            visible: true,
+	            format: "{0} ptn"
+	        }
+	    });
 }
+
 
