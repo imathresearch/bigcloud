@@ -26,8 +26,13 @@ public class Execution implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	private BC_Job job;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Result_Data result;
+	
 	@Column(nullable=false)
 	private States state;
+	
+	private boolean lastExecution;
 	
 	private String configuration;
 	
@@ -76,5 +81,21 @@ public class Execution implements Serializable {
 	
 	public void setJob(BC_Job job){
 		this.job = job;
+	}
+	
+	public Result_Data getResult(){
+		return this.result;
+	}
+	
+	public void setResult(Result_Data result){
+		this.result = result;
+	}
+	
+	public boolean getLastExecution(){
+		return this.lastExecution;
+	}
+	
+	public void setLastExecution(boolean lastExecution){
+		this.lastExecution = lastExecution;
 	}
 }

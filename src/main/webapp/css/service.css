@@ -1,0 +1,19 @@
+.execution-status  {
+  font-size: 15pt;
+  color: #3366FF;
+  text-align: center;
+  margin-top: 130px;
+}
+
+.execution-status-print {
+  font-size: 10pt;
+  color: #3366FF;
+  text-align: right;
+  margin-top: 350px;
+}
+
+.bigglyph  {
+  font-size: 300%;
+  color: #000033;
+  text-align: center;
+}

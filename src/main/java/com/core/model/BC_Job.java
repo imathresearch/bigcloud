@@ -13,8 +13,6 @@ import javax.persistence.*;
 @SequenceGenerator(name="seqJob", initialValue=5, allocationSize=1)
 public class BC_Job implements Serializable {
 
-	
-	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seqJob")
 	private Long id;

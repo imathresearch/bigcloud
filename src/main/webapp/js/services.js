@@ -45,7 +45,6 @@ function submitService_SentimentAnalysis(form_id){
         type: "POST",
         success: function(service_state) {
         	console.log("success of submitservice");
-        	console.log(service_state.state);
         	refreshJobsTable();
         	processServiceState(SA_param, service_state);
         },
@@ -98,6 +97,7 @@ function updateSAServiceUI(params, service_state){
 	switch (service_state.state){
 		case STATE.RUNNING:
 			console.log("The service is running");
+			getServiceParcialData(params, service_state.idExecution);
 			$('#execution-status_' + params.instance).show();
 			$('#execution-status_' + params.instance).html('Service Running!!<br><span class="glyphicon glyphicon-time bigglyph"></span>');			
 			break;
@@ -106,7 +106,7 @@ function updateSAServiceUI(params, service_state){
 			$('#execution-status-print_' + params.instance).show();
 			$('#execution-status-print_' + params.instance).html('Service Finished!!');
 			refreshJobsTable();
-			getServiceData(params, service_state.idExecution);
+			getServiceParcialData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
 			console.log("The service finished with errors");
@@ -122,6 +122,25 @@ function getServiceData(params, idExecution){
 	
 	$.ajax({
         url: "rest/service_service/getServiceData/" + idExecution,
+        cache: false,
+        dataType: "json",
+		contentType: "application/json; charset=utf-8",
+        type: "GET",
+        success: function(service_state) {
+        	console.log("on success getServiceData");
+        	plotDataService(params, service_state);
+        },
+        error: function(error) {
+            console.log("Possible error getting data of the execution - " + idExecution+ " " +  error.status);
+        },
+    });	
+		
+}
+
+function getServiceParcialData(params, idExecution){
+	
+	$.ajax({
+        url: "rest/service_service/getServiceParcialData/" + idExecution,
         cache: false,
         dataType: "json",
 		contentType: "application/json; charset=utf-8",
@@ -197,5 +216,7 @@ function plot_SA(params, service_state){
 	        }
 	    });
 }
+
+
 
 

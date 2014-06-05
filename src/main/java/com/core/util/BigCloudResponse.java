@@ -28,5 +28,25 @@ public class BigCloudResponse {
 			this.dataResult = dataResult;
 		}
 	}
+	
+	static public class ExecutionDTO{
+		
+		public String service;
+		public Long idInstance;
+		public Long idExecution;
+		public String params;
+		public States state;
+		
+		public ExecutionDTO(){}
+		
+		public ExecutionDTO(String service, Long idInstance, Long idExecution, String params, States state){
+			this.service = service;
+			this.idExecution = idExecution;
+			this.idInstance = idInstance;
+			this.params = params;
+			this.state = state;
+		}
+		
+	}
 
 }

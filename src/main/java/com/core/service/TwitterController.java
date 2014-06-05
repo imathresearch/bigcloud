@@ -3,6 +3,7 @@ package com.core.service;
 import com.core.data.MainDB;
 import com.core.model.BC_Job;
 import com.core.model.Execution;
+import com.core.model.Result_Data;
 import com.core.model.Service_Instance;
 import com.core.util.*;
 import com.util.AuthenticUser;
@@ -40,8 +41,9 @@ public class TwitterController extends AbstractController {
 	
 	@Inject private MainDB db;
 	
+	/*
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception {
+	public BigCloudResponse.ServiceDTO run_SentimentAnalysis_Syncr(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception {
 		
 		System.out.println("Running run_SentimentAnalysis");
 		
@@ -93,7 +95,78 @@ public class TwitterController extends AbstractController {
 		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), job.getId(), ex.getState());
 		return out;	
 		
+	}*/
+	
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception {
+		
+		System.out.println("Running run_SentimentAnalysis");
+		
+		Service_Instance instance = db.getServiceInstanceDB().findById(id_ServiceInstance);
+		AuthenticUser auser = new AuthenticUser(instance.getUser().getUserName(), instance.getUser().getPassword());
+		
+		//1. Create a new empty file that represents the file where the data of the job are going to be stored
+		File data_file = SA_createDataFile(instance);
+		
+		//2. Create a new file that represents the job to be executed	
+		//2.1 Copy the template file to the correct location, with another name and parameterised
+		String quote_query = "\""+query_terms+"\"";
+		File job_file = SA_createJobFileService(instance, quote_query, track_time, data_file.getName());
+				
+		//3. Upload job file to iMathCloud. Get idFile_Job
+		//4. Upload data file to iMathCloud. Get idFile_Data
+		//5. Submit job. Get idJob
+		Long idFile_Job = 0L;
+		Long idFile_Data = 0L;
+		Long idJob = 0L;
+		try{
+			idFile_Job = iMathCloud.uploadFile(auser, job_file.getPath(), "");	
+			idFile_Data = iMathCloud.uploadFile(auser, data_file.getPath(), "");
+			idJob = iMathCloud.runPythonJob(auser, idFile_Job);            
+		}
+		catch (IOException | iMathAPIException e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+			
+		//6.Persist the job Object, the result Object and the execution Object
+		BC_Job job = new BC_Job();
+		job.setIdiMathCloud(idJob);
+		job.setName(job_file.getPath());
+		Result_Data result = new Result_Data();
+		result.setIdFile(idFile_Data);
+		result.serNameFile(data_file.getName());		
+		//Fist we change the flag of the "last" execution associated to this service
+		List<Execution> old_lastExecution = db.getExecutionDB().findLastExecutionByServiceInstance(instance.getId());
+		if(old_lastExecution.size() != 0){
+			old_lastExecution.get(0).setLastExecution(false);
+		}
+		//Create the execution associated to this service instance 
+		Execution ex = new Execution();
+		ex.setJob(job);
+		ex.setResult(result);
+		ex.setServiceInstance(instance);
+		ex.setState(Execution.States.RUNNING);
+		ex.setLastExecution(true);
+		MapUtils.MyMap<String,String> m = new MapUtils.MyMap<String,String>();
+		m.setValue("query_terms", query_terms);
+		m.setValue("track_time", String.valueOf(track_time));
+		String jsonMap = m.createJsonString();
+		/*Map<String,String> m = new HashMap<String, String>();
+		m.put("query_terms", query_terms);
+		m.put("track_time", String.valueOf(track_time));
+		String string_m = m.toString();*/
+		System.out.println("Configuration string " + jsonMap);
+		ex.setConfiguration(jsonMap);
+		db.makePersistent(ex);
+		
+		
+		
+		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), job.getId(), ex.getState());
+		return out;	
+		
 	}
+	
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BigCloudResponse.ServiceDTO getExecutionState(Long idExecution) throws Exception{
@@ -184,6 +257,43 @@ public class TwitterController extends AbstractController {
 		return out;
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public BigCloudResponse.ServiceDTO getExecutionParcialData(Long idExecution) throws Exception{
+		
+		//1. First we find the id of the data file associated with the execution
+		Execution ex = db.getExecutionDB().findById(idExecution);
+		Long idFile_data = ex.getResult().getIdFile();
+		
+		System.out.println("getExecutionParcialData " + idFile_data);
+		
+		//2. Create the user to be authenthicated in the rest call of iMathCloud
+		AuthenticUser auser = new AuthenticUser(ex.getServiceInstance().getUser().getUserName(), ex.getServiceInstance().getUser().getPassword());
+		
+		//3. Get content of the data file. A string per line
+		// In the case of sentiment analysis, the content represents is a dictionary, where each key 
+		// represent a query terms and has associated a list of sentiment associated to
+		// each gathered tweet. It is in only one line
+		List<String> content; 
+		try{
+			content = iMathCloud.getFileContent(auser, idFile_data);
+		}
+		catch(Exception e){
+			throw e;
+		}
+		
+		Map<String, Double> processed_data  = new HashMap<String, Double> ();
+		BigCloudResponse.ServiceDTO out;
+		if (content.isEmpty()){
+			out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState(), processed_data);	
+		}
+		else{
+			processed_data = SA_processSentimentData(content.get(0));		
+			out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState(), processed_data);
+		}
+		
+		return out;
+	}
+	
 	public Map<String, Double> SA_processSentimentData(String raw_data){
 		
 		MapUtils.MyMap<String, List<Double>> mm = new MapUtils.MyMap<String, List<Double>>();
@@ -205,10 +315,23 @@ public class TwitterController extends AbstractController {
 		
 	}
 	
-	public File SA_createJobFileService(Service_Instance s, String query_terms, Long track_time) throws IOException{
+	public File SA_createDataFile (Service_Instance s) throws IOException{
 		
 		Constants C = new Constants();
-		File f_src = new File(C.JOB_SA_TEMPLATE);
+
+		String uid = "_" + UUID.randomUUID().toString();
+		String name_dst = String.valueOf(s.getId()) + "_" + "partialData" + uid;
+		File f_dst = new File (C.JOBS_FILES_DIR + "/" + name_dst + ".txt");
+		
+		f_dst.createNewFile();
+		
+		return f_dst;	
+	}
+	
+	public File SA_createJobFileService(Service_Instance s, String query_terms, Long track_time, String file_data) throws IOException{
+		
+		Constants C = new Constants();
+		File f_src = new File(C.JOB_SA_TEMPLATE_PARTIALDATA);
 		//New file
 		String uid = "_" + UUID.randomUUID().toString();
 		String name_dst = String.valueOf(s.getId()) + "_" + s.getUser().getUserName() + uid;
@@ -228,6 +351,7 @@ public class TwitterController extends AbstractController {
 		Map<String, String> ReplacementMap = new HashMap<String, String>();
 		ReplacementMap.put("<<QUERY>>", query_terms);
 		ReplacementMap.put("<<TIME>>", String.valueOf(track_time));
+		ReplacementMap.put("<<FILE>>", file_data);
 
 		String toWrite = buffer.toString();
 		for (Map.Entry<String, String> entry : ReplacementMap.entrySet()) {

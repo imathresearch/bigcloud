@@ -1,8 +1,15 @@
 package com.core.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.api.*;
 import com.core.data.MainDB;
 import com.core.model.BC_User;
+import com.core.model.Execution;
+import com.core.model.Execution.States;
+import com.core.model.Service_Instance;
+import com.core.util.BigCloudResponse.ExecutionDTO;
 import com.util.AuthenticUser;
 
 import javax.ejb.Stateful;
@@ -62,6 +69,33 @@ public class SessionService {
 		}
 		return rp;
     }
+	
+	@GET
+    @Path("/getActiveExecutions/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ExecutionDTO> REST_requestActiveExecutions(@PathParam("id") String userName) {
+		
+		System.out.println("getActiveExecutions");
+		List<Service_Instance> instances = db.getServiceInstanceDB().findByUser(userName);
+		
+		List<ExecutionDTO> out = new ArrayList<ExecutionDTO>();
+		
+		try{
+			for (Service_Instance inst : instances){
+				List<Execution> ex = db.getExecutionDB().findLastExecutionByServiceInstance(inst.getId());
+				if(ex.size() != 0){
+					ExecutionDTO ex_dto = new ExecutionDTO(inst.getService().getName(), inst.getId(), ex.get(0).getId(), ex.get(0).getConfiguration(), ex.get(0).getState() );
+					out.add(ex_dto);
+				}
+			}
+			
+			return out;
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	
 	private class StateResponse {
 		public String message;

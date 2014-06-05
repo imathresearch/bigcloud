@@ -148,4 +148,35 @@ public class ServiceService {
 		
 	}
 	
+	@GET
+    @Path("/getServiceParcialData/{idExecution}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BigCloudResponse.ServiceDTO REST_getServiceParcialData(@PathParam("idExecution") Long idExecution ) {
+		
+		try{
+			Execution ex = db.getExecutionDB().findById(idExecution);
+			String name_service = ex.getServiceInstance().getService().getName();
+			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
+			switch(name_service){
+				case "Twitter Sentiment Analysis":
+					out = tc.getExecutionParcialData(idExecution);
+					break;				
+				default:
+					System.out.println("Unknown Service");
+	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+					
+			}
+			return out;
+    	
+		}
+		catch(WebApplicationException e){
+			throw e;
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
 }
