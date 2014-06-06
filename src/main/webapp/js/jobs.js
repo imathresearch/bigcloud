@@ -1,16 +1,11 @@
 function runJob(idFile){
 	
-//	Console.log("Inside runJob");
-	
 	if (typeof ParamDTO === "undefined") {
 		ParamDTO = generateEmptyDTO();
-	}
-	
-	//ParamDTOS = JSON.stringify(ParamDTO);//(typeof ParamDTO == 'undefined'  || ParamDTO == '') ?  '' : JSON.stringify(ParamDTO);
-	//console.log("ParamDTO: " + ParamDTOS);
+	}	
 	
 	$.ajax({
-        url: "rest/jobpython_service/submitJob/" + userName + "/" + idFile ,// + "/" + ParamDTO,// +"/5",
+        url: "rest/jobpython_service/submitJob/" + userName + "/" + idFile ,
         cache: false,
         dataType: "json",
 		contentType: "application/json; charset=utf-8",
@@ -18,7 +13,6 @@ function runJob(idFile){
         type: "POST",
         success: function(host) {
         	refreshJobsTable();
-        	refreshFilesTree();
         },
         error: function(error) {
         	refreshJobsTable();
@@ -32,17 +26,20 @@ function runJob(idFile){
 
 
 function getJobs(b) {
+	
+	console.log("in getJobs");
+	
 	$.ajax({
-        url: "http://localhost:8080/bigCloud/rest/job_service_BC/getJobs_BC/" + userName,
+        url: "rest/job_service_BC/getJobs_BC/" + userName,
         cache: false,
         dataType: "json",
         type: "GET",
         success: function(jobs) {
+        	$( "#jobsTBODY" ).empty();
 			fillJobs(jobs);
 			if (b) {
-				//$( "#jobsXML" ).footable();
+				$( "#exec-table" ).footable();
 			}
-			setDefaultLanguage(mathLanguageCode);
         },
         error: function(error) {
             console.log("error loading files - " + error.status);
@@ -52,6 +49,8 @@ function getJobs(b) {
 
 
 function fillJobs(jobs) {
+	
+	//$( "#jobsTBODY" ).empty();
 	for(var i=0; i<jobs.length; i++) {
 		job = jobs[i];
 		var date = new Date(job['startDate']);
@@ -239,10 +238,12 @@ function plotStatDescriptiveInTab(files,idJob) {
 }
 
 function refreshJobsTable() {
-	$("#jobsTBODY").remove();
-	var aux = '<tbody id="jobsTBODY"></tbody>';
-	$("#exec-table").append(aux);
-	getJobs(false);
+	//$("#jobsTBODY").remove();
+	//var aux = '<tbody id="jobsTBODY"></tbody>';
+	//$("#exec-table").append(aux);
+	
+	$( "#jobsTBODY" ).empty();
+	getJobs(false);	
 }
 
 

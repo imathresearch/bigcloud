@@ -24,6 +24,8 @@
         <script src="js/jobs.js" type="text/javascript"></script>
         <script src="js/initialization.js" type="text/javascript"></script>
         <script src="js/services.js" type="text/javascript"></script>
+        <script src="js/SA_service.js" type="text/javascript"></script>
+        <script src="js/execution.js" type="text/javascript"></script>
         
         <link rel="stylesheet" href="bootstrap-integration/styles.css" />
         <link rel="stylesheet" href="css/service.css" />
@@ -99,7 +101,7 @@
 		</div>
 	    
 	    
-	    <div class="row clearfix">
+	    <!--  div class="row clearfix">
 			<div class="col-lg-4">
 				<section id="service2" class="well">
 					<h2 class="ra-well-title">Tweeter Service Alert</h2>
@@ -131,7 +133,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div--->
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">
@@ -147,14 +149,15 @@
 							<div class="ra-position">Demo service for beta release </div>
 						</div>
 	                </div>
-	                <div class="row" style="height:230px">      	
+	                <div class="row" style="height:260px">      	
 	                		<form id="SAForm_1" onsubmit="submitService('SAForm_1'); return false" accept-charset=utf-8>
 	                			<div align="center">
 									<h4>Query terms separated by comma</h4>
-									<textarea name="query_terms" rows="2" cols="30"></textarea><br><br>
+									<textarea id="query_terms_1" name="query_terms" rows="2" cols="30"></textarea><br><br>
 									<h4>Tracking time (seconds)</h4>
-									<input type="text" name="tracking_time"><br><br>
-									<input type="submit" value="Submit" class="btn btn-primary" > 
+									<input id="track_time_1" type="text" name="tracking_time"><br><br>
+									<input type="submit" value="Submit" class="btn btn-primary" >
+								</div>
 								
 							</form >			
 					</div>
@@ -164,17 +167,57 @@
 				<div id="tabstrip3" class="ra-section">
 					<ul>
 						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
-						
 					</ul>
-					<div style="height:400px">
-						<div id="radial-words-mood_1"></div>
-						<div class="execution-status" id="execution-status_1"></div>
-						<div class="execution-status-print" id="execution-status-print_1"></div>
+					<div style="height:430px">
+						<div id="radial-words-mood_1"></div>					
+						<label class="execution-status" id="execution-status_1"></label>
 					</div>
 	
 				</div>
 			</div>
 		</div>
+		
+		<!-- >div class="row clearfix">
+			<div class="col-lg-4">
+				<section id="service3" class="well">
+					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
+					<div class="row">
+						<div class="col-lg-5 col-sm-2">
+							<img src="bootstrap-integration/images/service_tweeter.png" class="ra-avatar img-responsive" />
+	                	</div>
+						<div class="col-lg-7 col-sm-2" style="height:120px">
+							<span class="ra-first-name">Big Data Service</span>
+							<span class="ra-last-name">Sentiment Analysis</span>
+							<div class="ra-position">Demo service for beta release </div>
+						</div>
+	                </div>
+	                <div class="row" style="height:260px">      	
+	                		<form id="SAForm_2" onsubmit="submitService('SAForm_2'); return false" accept-charset=utf-8>
+	                			<div align="center">
+									<h4>Query terms separated by comma</h4>
+									<textarea id="query_terms_2" name="query_terms" rows="2" cols="30"></textarea><br><br>
+									<h4>Tracking time (seconds)</h4>
+									<input id="track_time_2" type="text" name="tracking_time"><br><br>
+									<input type="submit" value="Submit" class="btn btn-primary" >
+								</div>
+								
+							</form >			
+					</div>
+				</section>
+			</div>
+			<div class="col-lg-8">
+				<div id="tabstrip4" class="ra-section">
+					<ul>
+						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
+					</ul>
+					<div style="height:430px">
+						<label class="execution-status" id="execution-status_2"></label>
+						<div id="radial-words-mood_2"></div>					
+					</div>
+	
+				</div>
+			</div>
+		</div--->
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">

@@ -10,13 +10,14 @@ $(document).ready( function() {
 function requestSession() {
 	
 	$.ajax({
-        url: "http://localhost:8080/bigCloud/rest/session_service_BC/new_BGSession/"+userName,
+        url: "rest/session_service_BC/new_BGSession/"+userName,
         cache: false,
         dataType: "json",
         type: "GET",
         success: function(host) {
         	console.log("Session confirmed -" );
         	getLastUserServiceExecutions(userName);
+        	refreshJobsTable();
         	refreshJobsTable();
     		
         },
@@ -46,13 +47,6 @@ function getLastUserServiceExecutions(userName){
 }
 
 function manageExecutions(executions){
-	
-	/*var SA_param = {
-            service: id_split[0],
-            instance : id_split[1],
-            query_terms: clean_terms,
-            track_time: time
-    };*/
 	
 	console.log("manage executions");
 	console.log(executions);
