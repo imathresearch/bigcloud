@@ -17,3 +17,15 @@
   color: #000033;
   text-align: center;
 }
+
+.group  {
+  padding: 20px;
+}
+
+.form-group  {
+  margin-bottom: 10px;
+}
+
+.form-group label  {
+  margin-bottom: 2px;
+}

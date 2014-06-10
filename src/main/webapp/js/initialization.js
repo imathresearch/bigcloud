@@ -1,7 +1,21 @@
 $(document).ready( function() {
 	requestSession();
+	var l = [];
+	for(var xh=0;xh<=23;xh++){
+		for(var xm=0;xm<60;xm+=5){
+			l.push(("0"+xh).slice(-2)+':'+("0"+xm).slice(-2));
+		}
+	}
+	jQuery('#datetimepicker_1').datetimepicker({
+		minDate:'-1970/01/01',
+		startDate:'-1970/01/01',
+		allowTimes: l
+		//closeOnDateSelect:true,
+	});
+	
 	
 });
+
 
 /**
  * The function that requests a session for the user and initializes the math console 
@@ -59,7 +73,8 @@ function manageExecutions(executions){
 					service: 'SAForm',
 					instance: executions[i].idInstance,
 					query_terms: p.query_terms,
-					track_time: p.track_time
+					format_track_time: p.track_time,
+					update_freq: p.update_freq
 				};
 				var execution_state = {
 					idExecution: executions[i].idExecution,

@@ -14,12 +14,14 @@
         <link href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.bootstrap.min.css" rel="stylesheet" />
         <link href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.dataviz.min.css" rel="stylesheet" />
         <link href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.dataviz.bootstrap.min.css" rel="stylesheet" />
-
+		<link rel="stylesheet" type="text/css" href="datepicker/css/jquery.datetimepicker.css" />
+		
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://cdn.kendostatic.com/2014.1.318/js/kendo.all.min.js"></script>
         <script src="http://cdn.kendostatic.com/2014.1.318/js/kendo.timezones.min.js"></script>
-
-
+  	
+		<script src="datepicker/js/jquery.datetimepicker.js"></script>
+  		
         <script src="bootstrap-integration/js/examples.js"></script>
         <script src="js/jobs.js" type="text/javascript"></script>
         <script src="js/initialization.js" type="text/javascript"></script>
@@ -101,9 +103,9 @@
 		</div>
 	    
 	    
-	    <!--  div class="row clearfix">
+	    <div class="row clearfix">
 			<div class="col-lg-4">
-				<section id="service2" class="well">
+				<section id="service4" class="well">
 					<h2 class="ra-well-title">Tweeter Service Alert</h2>
 					<div class="row">
 						<div class="col-lg-5 col-sm-2">
@@ -133,11 +135,11 @@
 					</div>
 				</div>
 			</div>
-		</div--->
+		</div>
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">
-				<section id="service2" class="well">
+				<section id="service1" class="well">
 					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
 					<div class="row">
 						<div class="col-lg-5 col-sm-2">
@@ -151,14 +153,21 @@
 	                </div>
 	                <div class="row" style="height:260px">      	
 	                		<form id="SAForm_1" onsubmit="submitService('SAForm_1'); return false" accept-charset=utf-8>
-	                			<div align="center">
-									<h4>Query terms separated by comma</h4>
-									<textarea id="query_terms_1" name="query_terms" rows="2" cols="30"></textarea><br><br>
-									<h4>Tracking time (seconds)</h4>
-									<input id="track_time_1" type="text" name="tracking_time"><br><br>
-									<input type="submit" value="Submit" class="btn btn-primary" >
-								</div>
-								
+	           					<br>			
+						        <div class="form-group">
+						          <label >Query Terms</label>
+						          <input type="text" class="form-control" id="query_terms_1" placeholder="Terms separated by commas">
+						        </div>
+						        <div class="form-group">
+						          <label>Tracking End Date</label>
+						          <input type="text" class="form-control" id="datetimepicker_1" placeholder="Click to open the calendar">
+						        </div>
+						        <div class="form-group">
+						          <label>Data Update Frequency</label>
+						          <input type="text" class="form-control" id="update_freq_1" placeholder="Seconds">
+						        </div>
+						        <br>						       
+								<input type="submit" value="Submit" class="btn btn-primary" >      								
 							</form >			
 					</div>
 				</section>
@@ -177,9 +186,9 @@
 			</div>
 		</div>
 		
-		<!-- >div class="row clearfix">
+		<!--div class="row clearfix">
 			<div class="col-lg-4">
-				<section id="service3" class="well">
+				<section id="service2" class="well">
 					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
 					<div class="row">
 						<div class="col-lg-5 col-sm-2">
@@ -195,10 +204,21 @@
 	                		<form id="SAForm_2" onsubmit="submitService('SAForm_2'); return false" accept-charset=utf-8>
 	                			<div align="center">
 									<h4>Query terms separated by comma</h4>
-									<textarea id="query_terms_2" name="query_terms" rows="2" cols="30"></textarea><br><br>
-									<h4>Tracking time (seconds)</h4>
-									<input id="track_time_2" type="text" name="tracking_time"><br><br>
+									<textarea id="query_terms_2" name="query_terms" rows="2" cols="30"></textarea><br>
+									
+									<div class="input-pair">
+      									<h4>Tracking End Date</h4>
+      									<input id="datetimepicker_2" type="text" > 
+    								</div>
+    								
+    								<div class="input-pair">
+      									<h4>Data update frequency (seconds)</h4>
+      									<input id="update_freq_2" type="text" size="8">
+    								</div>
+									<br>
+				
 									<input type="submit" value="Submit" class="btn btn-primary" >
+								
 								</div>
 								
 							</form >			
@@ -211,13 +231,15 @@
 						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
 					</ul>
 					<div style="height:430px">
-						<label class="execution-status" id="execution-status_2"></label>
 						<div id="radial-words-mood_2"></div>					
+						<label class="execution-status" id="execution-status_2"></label>
 					</div>
 	
 				</div>
 			</div>
-		</div--->
+		</div-->
+		
+	
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">

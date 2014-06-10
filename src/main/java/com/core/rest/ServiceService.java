@@ -56,9 +56,12 @@ public class ServiceService {
     public BigCloudResponse.ServiceDTO REST_submitService(String json_params) {
 		
 		try{
+			
+			System.out.println("Submit service " + json_params);
 			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
 	    	MapUtils.MyMap <String, String> mm = new MapUtils.MyMap<String, String>();   	
 	    	mm.jsonToMap(json_params);
+	    	System.out.println("jsonToMap " + json_params);
 	    	    	
 	    	String service_name = mm.getValue("service");
 	    	switch(service_name){
@@ -66,7 +69,9 @@ public class ServiceService {
 	    			Long id_ServiceInstance = Long.parseLong(mm.getValue("instance"));
 	    			String query_terms = mm.getValue("query_terms");
 	    			Long track_time = Long.parseLong(mm.getValue("track_time"));
-	    			out = tc.run_SentimentAnalysis(id_ServiceInstance, query_terms, track_time);
+	    			String formatted_track_time = mm.getValue("format_track_time");
+	    			Long update_freq = Long.parseLong(mm.getValue("update_freq"));	    			
+	    			out = tc.run_SentimentAnalysis(id_ServiceInstance, query_terms, track_time, formatted_track_time, update_freq);
 	    			System.out.println("Confirmation run_SentimentAnalysis ");
 	    			break;
 	    		default:

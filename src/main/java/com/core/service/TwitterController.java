@@ -99,7 +99,7 @@ public class TwitterController extends AbstractController {
 	
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time) throws Exception {
+	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time, String formatted_track_time, Long update_freq) throws Exception {
 		
 		System.out.println("Running run_SentimentAnalysis");
 		
@@ -150,7 +150,8 @@ public class TwitterController extends AbstractController {
 		ex.setLastExecution(true);
 		MapUtils.MyMap<String,String> m = new MapUtils.MyMap<String,String>();
 		m.setValue("query_terms", query_terms);
-		m.setValue("track_time", String.valueOf(track_time));
+		m.setValue("track_time", formatted_track_time);
+		m.setValue("update_freq", String.valueOf(update_freq));
 		String jsonMap = m.createJsonString();
 		/*Map<String,String> m = new HashMap<String, String>();
 		m.put("query_terms", query_terms);

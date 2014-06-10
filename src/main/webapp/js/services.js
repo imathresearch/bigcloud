@@ -23,7 +23,7 @@ function processServiceState(params, service_state){
 	if (service_state.state == STATE.RUNNING){
 		setTimeout(function (){
 			getExecutionState(params, idExecution);
-		}, 10000);
+		}, params.update_freq*1000);
 	}
 	
 	switch (params.service){

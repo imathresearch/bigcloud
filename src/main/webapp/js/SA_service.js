@@ -2,8 +2,14 @@ function submitService_SentimentAnalysis(form_id){
 	
 	var id_split = form_id.split('_');
 	
-	var terms = $('#query_terms_'+id_split[1]).val();
-	var time = $('#track_time_'+id_split[1]).val();
+	var terms = $('#query_terms_'+id_split[1]).val();	
+	var dataPicker_val = $('#datetimepicker_'+id_split[1]).val();
+	var freq = $('#update_freq_'+id_split[1]).val();
+	
+	var time_ms = Date.parse(dataPicker_val);
+	var d = new Date();
+	var listen_time = time_ms - d.getTime();
+	listen_time = Math.floor(listen_time/1000);
 	
 	//The query terms cannot have space between them
 	var clean_terms = terms.replace(/^\s+|\s+$/g, "").replace(/\s*,\s*/g, ",");
@@ -12,7 +18,9 @@ function submitService_SentimentAnalysis(form_id){
             service: id_split[0],
             instance : id_split[1],
             query_terms: clean_terms,
-            track_time: time
+            track_time: listen_time.toString(),
+            format_track_time: dataPicker_val,
+            update_freq:freq
     };
 	
 	$('#execution-status_' + SA_params.instance).hide();	
@@ -42,13 +50,14 @@ function submitService_SentimentAnalysis(form_id){
 function update_SAServiceUI(params, service_state){
 	
 	$('#query_terms_'+params.instance).val(params.query_terms);
-	$('#track_time_'+params.instance).val(params.track_time);
+	$('#datetimepicker_'+params.instance).val(params.format_track_time);
+	$('#update_freq_'+params.instance).val(params.update_freq);
 
 	switch (service_state.state){
 		case STATE.RUNNING:
 			console.log("The service is running");
 			getExecutionParcialData(params, service_state.idExecution);
-			$('#execution-status_' + params.instance).show();
+			
 			$('#execution-status_' + params.instance).html('Service Running');			
 			break;
 		case STATE.FINISHED_OK:
@@ -114,5 +123,7 @@ function plot_SA(params, service_state){
 	            format: "{0} ptn"
 	        }
 	    });
+	
+	$('#execution-status_' + params.instance).show();
 }
 
