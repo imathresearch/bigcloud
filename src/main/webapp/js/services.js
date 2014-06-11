@@ -1,7 +1,7 @@
 var STATE = {CREATED:"CREATED", RUNNING:"RUNNING", PAUSED:"PAUSED", CANCELLED:"CANCELLED", FINISHED_OK:"FINISHED_OK", FINISHED_ERROR:"FINISHED_ERROR"};
 
 function submitService(form_id){
-	console.log(form_id);
+	//console.log(form_id);
 	var id_split = form_id.split('_');
 	switch(id_split[0]) {
 		case "SAForm":

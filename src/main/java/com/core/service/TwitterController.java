@@ -101,7 +101,7 @@ public class TwitterController extends AbstractController {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BigCloudResponse.ServiceDTO run_SentimentAnalysis(Long id_ServiceInstance, String query_terms, Long track_time, String formatted_track_time, Long update_freq) throws Exception {
 		
-		System.out.println("Running run_SentimentAnalysis");
+		//System.out.println("Running run_SentimentAnalysis");
 		
 		Service_Instance instance = db.getServiceInstanceDB().findById(id_ServiceInstance);
 		AuthenticUser auser = new AuthenticUser(instance.getUser().getUserName(), instance.getUser().getPassword());
@@ -153,11 +153,7 @@ public class TwitterController extends AbstractController {
 		m.setValue("track_time", formatted_track_time);
 		m.setValue("update_freq", String.valueOf(update_freq));
 		String jsonMap = m.createJsonString();
-		/*Map<String,String> m = new HashMap<String, String>();
-		m.put("query_terms", query_terms);
-		m.put("track_time", String.valueOf(track_time));
-		String string_m = m.toString();*/
-		System.out.println("Configuration string " + jsonMap);
+		//System.out.println("Configuration string " + jsonMap);
 		ex.setConfiguration(jsonMap);
 		db.makePersistent(ex);
 		
@@ -172,13 +168,13 @@ public class TwitterController extends AbstractController {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BigCloudResponse.ServiceDTO getExecutionState(Long idExecution) throws Exception{
 		
-		System.out.println("Function getExecutionState");
+		//System.out.println("Function getExecutionState");
 		
 		//1. First we find the imathCloud job associated to the execution
 		Execution ex = db.getExecutionDB().findById(idExecution);
 		Long imathCloud_idJob = ex.getJob().getIdiMathCloud();
 		
-		System.out.println("Execution initial state " + ex.getState().ordinal());
+		//System.out.println("Execution initial state " + ex.getState().ordinal());
 		
 		//2. Create the user to be authenthicated in the rest call of iMathCloud
 		AuthenticUser auser = new AuthenticUser(ex.getServiceInstance().getUser().getUserName(), ex.getServiceInstance().getUser().getPassword());
@@ -200,7 +196,7 @@ public class TwitterController extends AbstractController {
 		
 		BigCloudResponse.ServiceDTO out = new  BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());
 		
-		System.out.println("Execution final state " + ex.getState().ordinal());
+		//System.out.println("Execution final state " + ex.getState().ordinal());
 		
 		return out;
 	}
@@ -265,7 +261,7 @@ public class TwitterController extends AbstractController {
 		Execution ex = db.getExecutionDB().findById(idExecution);
 		Long idFile_data = ex.getResult().getIdFile();
 		
-		System.out.println("getExecutionParcialData " + idFile_data);
+		//System.out.println("getExecutionParcialData " + idFile_data);
 		
 		//2. Create the user to be authenthicated in the rest call of iMathCloud
 		AuthenticUser auser = new AuthenticUser(ex.getServiceInstance().getUser().getUserName(), ex.getServiceInstance().getUser().getPassword());

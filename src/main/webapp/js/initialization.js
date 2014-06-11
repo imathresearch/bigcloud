@@ -13,6 +13,13 @@ $(document).ready( function() {
 		//closeOnDateSelect:true,
 	});
 	
+	jQuery('#datetimepicker_2').datetimepicker({
+		minDate:'-1970/01/01',
+		startDate:'-1970/01/01',
+		allowTimes: l
+		//closeOnDateSelect:true,
+	});
+	
 	
 });
 
@@ -29,7 +36,7 @@ function requestSession() {
         dataType: "json",
         type: "GET",
         success: function(host) {
-        	console.log("Session confirmed -" );
+        	//console.log("Session confirmed -" );
         	getLastUserServiceExecutions(userName);
         	refreshJobsTable();
         	refreshJobsTable();
@@ -50,7 +57,7 @@ function getLastUserServiceExecutions(userName){
 		contentType: "application/json; charset=utf-8",
         type: "GET",
         success: function(executions) {
-        	console.log("on success getServicesExecutions");
+        	//console.log("on success getServicesExecutions");
         	manageExecutions(executions);
         },
         error: function(error) {
@@ -62,8 +69,6 @@ function getLastUserServiceExecutions(userName){
 
 function manageExecutions(executions){
 	
-	console.log("manage executions");
-	console.log(executions);
 	var i;
 	for (i = 0; i < executions.length; i++){
 		switch (executions[i].service){

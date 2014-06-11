@@ -44,12 +44,11 @@ public class SessionService {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
 		boolean session = false;
-		System.out.println("new_BGSession");
 		try {
 			BC_User user = db.getBC_UserDB().findById(userName);
 			//One user must exist
 			if(user!= null){
-				System.out.println("name " + user.getFirstName());
+				//System.out.println("name " + user.getFirstName());
 				AuthenticUser auser = new AuthenticUser(userName, "h1i1m1");
 				session = iMathCloud.requestSession(auser);
 			}
@@ -74,8 +73,7 @@ public class SessionService {
     @Path("/getActiveExecutions/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ExecutionDTO> REST_requestActiveExecutions(@PathParam("id") String userName) {
-		
-		System.out.println("getActiveExecutions");
+				
 		List<Service_Instance> instances = db.getServiceInstanceDB().findByUser(userName);
 		
 		List<ExecutionDTO> out = new ArrayList<ExecutionDTO>();

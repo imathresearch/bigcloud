@@ -57,11 +57,11 @@ public class ServiceService {
 		
 		try{
 			
-			System.out.println("Submit service " + json_params);
+			//System.out.println("Submit service " + json_params);
 			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
 	    	MapUtils.MyMap <String, String> mm = new MapUtils.MyMap<String, String>();   	
 	    	mm.jsonToMap(json_params);
-	    	System.out.println("jsonToMap " + json_params);
+	    	//System.out.println("jsonToMap " + json_params);
 	    	    	
 	    	String service_name = mm.getValue("service");
 	    	switch(service_name){
@@ -72,10 +72,10 @@ public class ServiceService {
 	    			String formatted_track_time = mm.getValue("format_track_time");
 	    			Long update_freq = Long.parseLong(mm.getValue("update_freq"));	    			
 	    			out = tc.run_SentimentAnalysis(id_ServiceInstance, query_terms, track_time, formatted_track_time, update_freq);
-	    			System.out.println("Confirmation run_SentimentAnalysis ");
+	    			//System.out.println("Confirmation run_SentimentAnalysis ");
 	    			break;
 	    		default:
-	    			System.out.println("Unknown Service");
+	    			//System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
 	    			//break;   				
 	    	}

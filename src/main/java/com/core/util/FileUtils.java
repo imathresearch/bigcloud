@@ -17,8 +17,8 @@ public class FileUtils {
 		Path p_src = Paths.get(src.getPath());
 		Path p_dst = Paths.get(dst.getPath());
 		
-		System.out.println("source " + src.getPath());
-		System.out.println("destination " + dst.getPath());
+		//System.out.println("source " + src.getPath());
+		//System.out.println("destination " + dst.getPath());
 		
 		Files.copy(p_src, p_dst, StandardCopyOption.REPLACE_EXISTING);
 		

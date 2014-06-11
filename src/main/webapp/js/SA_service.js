@@ -6,43 +6,77 @@ function submitService_SentimentAnalysis(form_id){
 	var dataPicker_val = $('#datetimepicker_'+id_split[1]).val();
 	var freq = $('#update_freq_'+id_split[1]).val();
 	
-	var time_ms = Date.parse(dataPicker_val);
-	var d = new Date();
-	var listen_time = time_ms - d.getTime();
-	listen_time = Math.floor(listen_time/1000);
+	var check = check_SAParams(terms, dataPicker_val, freq);
 	
-	//The query terms cannot have space between them
-	var clean_terms = terms.replace(/^\s+|\s+$/g, "").replace(/\s*,\s*/g, ",");
+	if (check){
 	
-	var SA_params = {
-            service: id_split[0],
-            instance : id_split[1],
-            query_terms: clean_terms,
-            track_time: listen_time.toString(),
-            format_track_time: dataPicker_val,
-            update_freq:freq
-    };
+		var time_ms = Date.parse(dataPicker_val);
+		var d = new Date();
+		var listen_time = time_ms - d.getTime();
+		listen_time = Math.floor(listen_time/1000);
+		
+		//The query terms cannot have space between them
+		var clean_terms = terms.replace(/^\s+|\s+$/g, "").replace(/\s*,\s*/g, ",");
+		
+		var SA_params = {
+	            service: id_split[0],
+	            instance : id_split[1],
+	            query_terms: clean_terms,
+	            track_time: listen_time.toString(),
+	            format_track_time: dataPicker_val,
+	            update_freq:freq
+	    };
+		
+		$('#execution-status_' + SA_params.instance).hide();	
+		$("#radial-words-mood_" + SA_params.instance).hide();
 	
-	$('#execution-status_' + SA_params.instance).hide();	
-	$("#radial-words-mood_" + SA_params.instance).hide();
+		
+		$.ajax({
+	        url: "rest/service_service/submitService",
+	        cache: false,
+	        dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			data : JSON.stringify(SA_params),
+	        type: "POST",
+	        success: function(service_state) {
+	        	//console.log("success of submitservice");
+	        	refreshJobsTable();
+	        	processServiceState(SA_params, service_state);
+	        },
+	        error: function(error) {
+	            console.log("Possible error submitting Service -" + error.status);
+	        },
+	    });
+	}
+	else{
+		//console.log("Error en los parametros");
+		alert("Incorrect parameters!!. Check:\n 1. The query is not empty \n 2. The date is in the future \n 3. The frequency is potive");
+		
+	}
+}
 
+function check_SAParams(terms, date, frequency){
+
+	    if (!terms || !date || !frequency ){	       
+	        return false;
+	    }
+	    else{    
+	        //check that date is in the future
+	        var time_ms = Date.parse(date);
+		    var d = new Date();
+		    var listen_time = time_ms - d.getTime();
+	        if(listen_time < 0){	           
+	            return false;
+	        }	    
+	        //check that the frequency is positive
+	        var f = parseInt(frequency);
+	        if(f < 0){
+	           return false;
+	        }
+	        
+	        return true;    
+	    }
 	
-	$.ajax({
-        url: "rest/service_service/submitService",
-        cache: false,
-        dataType: "json",
-		contentType: "application/json; charset=utf-8",
-		data : JSON.stringify(SA_params),
-        type: "POST",
-        success: function(service_state) {
-        	console.log("success of submitservice");
-        	refreshJobsTable();
-        	processServiceState(SA_params, service_state);
-        },
-        error: function(error) {
-            console.log("Possible error submitting Service -" + error.status);
-        },
-    });	
 }
 
 
@@ -55,22 +89,22 @@ function update_SAServiceUI(params, service_state){
 
 	switch (service_state.state){
 		case STATE.RUNNING:
-			console.log("The service is running");
+			//console.log("The service is running");
 			getExecutionParcialData(params, service_state.idExecution);
 			
 			$('#execution-status_' + params.instance).html('Service Running');			
 			break;
 		case STATE.FINISHED_OK:
-			console.log("The service finished ok");
+			//console.log("The service finished ok");
 			$('#execution-status_' + params.instance).html('Service Finished');
 			refreshJobsTable();
 			getExecutionParcialData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
-			console.log("The service finished with errors");
+			//console.log("The service finished with errors");
 			break;
 		default:
-			console.log("Unknown state " + service_state.state);
+			//console.log("Unknown state " + service_state.state);
 			break;
 	}
 
@@ -78,17 +112,11 @@ function update_SAServiceUI(params, service_state){
 
 function plot_SA(params, service_state){
 	
-	console.log("IN plot_SA");
-	
 	var categories = params.query_terms.split(",");
-	
-	console.log(service_state.dataResult);
 	var x;
 	var dataResult = [];
 	for (x=0;x<categories.length;x++){
-		console.log(categories[x]);
-		dataResult.push(service_state.dataResult[categories[x]]*100);
-		console.log(service_state.dataResult[categories[x]]*100);
+		dataResult.push(service_state.dataResult[categories[x]]*100);		
 	}
 	
 	//$('#execution-status_' + params.instance).hide();

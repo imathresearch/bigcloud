@@ -21,6 +21,7 @@
         <script src="http://cdn.kendostatic.com/2014.1.318/js/kendo.timezones.min.js"></script>
   	
 		<script src="datepicker/js/jquery.datetimepicker.js"></script>
+		<script src="bootstrap-integration/js/bootbox.min.js"></script>
   		
         <script src="bootstrap-integration/js/examples.js"></script>
         <script src="js/jobs.js" type="text/javascript"></script>
@@ -103,7 +104,7 @@
 		</div>
 	    
 	    
-	    <div class="row clearfix">
+	    <!--div class="row clearfix">
 			<div class="col-lg-4">
 				<section id="service4" class="well">
 					<h2 class="ra-well-title">Tweeter Service Alert</h2>
@@ -135,7 +136,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div-->
 		
 		<div class="row clearfix">
 			<div class="col-lg-4">
@@ -186,9 +187,9 @@
 			</div>
 		</div>
 		
-		<!--div class="row clearfix">
+		<div class="row clearfix">
 			<div class="col-lg-4">
-				<section id="service2" class="well">
+				<section id="service3" class="well">
 					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
 					<div class="row">
 						<div class="col-lg-5 col-sm-2">
@@ -202,25 +203,21 @@
 	                </div>
 	                <div class="row" style="height:260px">      	
 	                		<form id="SAForm_2" onsubmit="submitService('SAForm_2'); return false" accept-charset=utf-8>
-	                			<div align="center">
-									<h4>Query terms separated by comma</h4>
-									<textarea id="query_terms_2" name="query_terms" rows="2" cols="30"></textarea><br>
-									
-									<div class="input-pair">
-      									<h4>Tracking End Date</h4>
-      									<input id="datetimepicker_2" type="text" > 
-    								</div>
-    								
-    								<div class="input-pair">
-      									<h4>Data update frequency (seconds)</h4>
-      									<input id="update_freq_2" type="text" size="8">
-    								</div>
-									<br>
-				
-									<input type="submit" value="Submit" class="btn btn-primary" >
-								
-								</div>
-								
+	           					<br>			
+						        <div class="form-group">
+						          <label >Query Terms</label>
+						          <input type="text" class="form-control" id="query_terms_2" placeholder="Terms separated by commas">
+						        </div>
+						        <div class="form-group">
+						          <label>Tracking End Date</label>
+						          <input type="text" class="form-control" id="datetimepicker_2" placeholder="Click to open the calendar">
+						        </div>
+						        <div class="form-group">
+						          <label>Data Update Frequency</label>
+						          <input type="text" class="form-control" id="update_freq_2" placeholder="Seconds">
+						        </div>
+						        <br>						       
+								<input type="submit" value="Submit" class="btn btn-primary" >      								
 							</form >			
 					</div>
 				</section>
@@ -237,7 +234,8 @@
 	
 				</div>
 			</div>
-		</div-->
+		</div>
+
 		
 	
 		
@@ -308,6 +306,7 @@ function resizeTabStripContent() {
     kendo.resize("#tabstrip");
     kendo.resize("#tabstrip2");
     kendo.resize("#tabstrip3");
+    kendo.resize("#tabstrip4");
 }
 
 
@@ -333,6 +332,13 @@ $("#tabstrip2").kendoTabStrip({
 });
 
 $("#tabstrip3").kendoTabStrip({
+    animation: {
+        open: { effects: "fadeIn" }
+    },
+    activate: resizeTabStripContent
+});
+
+$("#tabstrip4").kendoTabStrip({
     animation: {
         open: { effects: "fadeIn" }
     },

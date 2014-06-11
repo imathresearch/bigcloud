@@ -34,7 +34,7 @@ public class JobService {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
 		String jobs = new String();
-		System.out.println("getJobsBC");
+		//System.out.println("getJobsBC");
 		AuthenticUser auser = new AuthenticUser(userName, "h1i1m1");
 		try {
 			jobs = iMathCloud.getJobs(auser);

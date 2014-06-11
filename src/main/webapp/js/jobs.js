@@ -26,9 +26,7 @@ function runJob(idFile){
 
 
 function getJobs(b) {
-	
-	console.log("in getJobs");
-	
+		
 	$.ajax({
         url: "rest/job_service_BC/getJobs_BC/" + userName,
         cache: false,

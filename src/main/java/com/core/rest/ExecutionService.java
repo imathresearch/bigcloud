@@ -46,7 +46,7 @@ public class ExecutionService {
 					out = tc.getExecutionState(idExecution);
 					break;				
 				default:
-					System.out.println("Unknown Service");
+					//System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
 					
 			}
@@ -77,7 +77,7 @@ public class ExecutionService {
 					out = tc.getExecutionData(idExecution);
 					break;				
 				default:
-					System.out.println("Unknown Service");
+					//System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
 					
 			}
@@ -108,7 +108,7 @@ public class ExecutionService {
 					out = tc.getExecutionParcialData(idExecution);
 					break;				
 				default:
-					System.out.println("Unknown Service");
+					//System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
 					
 			}

@@ -59,7 +59,7 @@ public class MapUtils {
 			 ObjectMapper mapper = new ObjectMapper();
 			 mapper.writeValue(jsonGenerator, this.mymap);
 			 jsonGenerator.close();
-			 System.out.println(writer.toString());
+			 //System.out.println(writer.toString());
 			 return writer.toString();
 		 }
 	}
