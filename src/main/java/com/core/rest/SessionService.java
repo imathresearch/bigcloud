@@ -43,13 +43,16 @@ public class SessionService {
     public StateResponse REST_requestBGSession(@PathParam("id") String userName) {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
+		
 		boolean session = false;
 		try {
+			
 			BC_User user = db.getBC_UserDB().findById(userName);
+			
 			//One user must exist
 			if(user!= null){
 				//System.out.println("name " + user.getFirstName());
-				AuthenticUser auser = new AuthenticUser(userName, "h1i1m1");
+				AuthenticUser auser = new AuthenticUser(userName, user.getPassword());
 				session = iMathCloud.requestSession(auser);
 			}
 		}
