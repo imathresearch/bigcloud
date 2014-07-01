@@ -98,7 +98,10 @@ function getImageJobStatus(status) {
 			break;
 		case "FINISHED_ERROR":
 			aux = '<img src="css/images/job_error.png" alt="Finished error">';
-			break;	
+			break;
+		case "CANCELLED":
+			aux = '<img src="css/images/job_ok.png" alt="Cancelled">';
+			break;
 		default:
 			aux = '<img src="css/images/job_running.png" alt="other">';
 	}

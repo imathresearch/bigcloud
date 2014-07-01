@@ -12,16 +12,20 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.api.iMathCloud;
 import com.core.data.MainDB;
+import com.core.model.BC_User;
 import com.core.model.Execution;
 import com.core.service.TwitterController;
 import com.core.util.BigCloudResponse;
+import com.util.AuthenticUser;
+
 
 
 /**
  * A REST web service that provides access to services related to executions
  * 
- * @author ipinyol
+ * @author ammartinez
  */
 @Path("/execution_service")
 @RequestScoped
@@ -121,6 +125,33 @@ public class ExecutionService {
 		catch(Exception e){
 			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
+		
+	}
+	
+	@GET
+    @Path("/stopExecution/{idExecution}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public boolean REST_stopExecution(@PathParam("idExecution") Long idExecution ) {
+		
+		boolean success = false;
+		try{
+			Execution ex = db.getExecutionDB().findById(idExecution);
+			Long idJob_iMathCloud = ex.getJob().getIdiMathCloud();
+			BC_User user = ex.getServiceInstance().getUser();
+			AuthenticUser auser = new AuthenticUser(user.getUserName(), user.getPassword());
+			
+			success = iMathCloud.stopJob(auser, idJob_iMathCloud);
+    	
+		}
+		catch(WebApplicationException e){
+			throw e;
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		
+		return success;
 		
 	}
 

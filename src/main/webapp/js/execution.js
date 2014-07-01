@@ -51,3 +51,20 @@ function getExecutionParcialData(params, idExecution){
     });	
 		
 }
+
+function stopExecution(idExecution){
+	
+	$.ajax({
+        url: "rest/execution_service/stopExecution/" + idExecution,
+        cache: false,
+        dataType: "json",
+		contentType: "application/json; charset=utf-8",
+        type: "GET",
+        success: function(service_state) {
+        	console.log("execution stopped");
+        },
+        error: function(error) {
+            console.log("Possible error getting data of the execution - " + idExecution+ " " +  error.status);
+        },
+    });	
+}

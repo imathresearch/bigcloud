@@ -91,5 +91,31 @@ public class ServiceService {
 		
 	}
 	
+	@GET
+    @Path("/getLastExecution/{id_instance}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BigCloudResponse.ServiceDTO REST_getLastExecution(@PathParam("id_instance") Long id_instance ) {
+		
+		BigCloudResponse.ServiceDTO out = null;
+		
+		try{
+			List<Execution> list_exc = db.getExecutionDB().findLastExecutionByServiceInstance(id_instance);
+			if(list_exc.size() == 1){
+				out = new BigCloudResponse.ServiceDTO(list_exc.get(0).getId(), list_exc.get(0).getJob().getId(), list_exc.get(0).getState());
+			}
+    	
+		}
+		catch(WebApplicationException e){
+			throw e;
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		
+		return out;
+		
+	}
+	
 		
 }

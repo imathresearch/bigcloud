@@ -168,7 +168,9 @@
 						          <input type="text" class="form-control" id="update_freq_1" placeholder="Seconds">
 						        </div>
 						        <br>						       
-								<input type="submit" value="Submit" class="btn btn-primary" >      								
+								<input type="submit" value="Submit" class="btn btn-primary" >
+								<button type="button" id="stop" onclick="stopService('SAForm_1');" class="btn btn-default btn-stop
+">Stop Service</button>   								
 							</form >			
 					</div>
 				</section>
@@ -217,7 +219,9 @@
 						          <input type="text" class="form-control" id="update_freq_2" placeholder="Seconds">
 						        </div>
 						        <br>						       
-								<input type="submit" value="Submit" class="btn btn-primary" >      								
+								<input type="submit" value="Submit" class="btn btn-primary" >
+								<button type="button" id="stop" onclick="stopService('SAForm_2');" class="btn btn-default btn-stop
+">Stop Service</button>      								
 							</form >			
 					</div>
 				</section>

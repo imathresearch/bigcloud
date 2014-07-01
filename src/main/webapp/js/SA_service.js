@@ -55,6 +55,9 @@ function submitService_SentimentAnalysis(form_id){
 	}
 }
 
+
+
+
 function check_SAParams(terms, date, frequency){
 
 	    if (!terms || !date || !frequency ){	       
@@ -90,8 +93,7 @@ function update_SAServiceUI(params, service_state){
 	switch (service_state.state){
 		case STATE.RUNNING:
 			//console.log("The service is running");
-			getExecutionParcialData(params, service_state.idExecution);
-			
+			getExecutionParcialData(params, service_state.idExecution);			
 			$('#execution-status_' + params.instance).html('Service Running');			
 			break;
 		case STATE.FINISHED_OK:
@@ -101,7 +103,13 @@ function update_SAServiceUI(params, service_state){
 			getExecutionParcialData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
+			refreshJobsTable();
 			//console.log("The service finished with errors");
+			break;
+		case STATE.CANCELLED:
+			$('#execution-status_' + params.instance).html('Service Cancelled');
+			refreshJobsTable();
+			getExecutionParcialData(params, service_state.idExecution);
 			break;
 		default:
 			//console.log("Unknown state " + service_state.state);
