@@ -26,11 +26,15 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.api.iMathCloud;
 import com.core.data.MainDB;
+import com.core.model.BC_User;
 import com.core.model.Execution;
+import com.core.model.Execution.States;
 import com.core.service.TwitterController;
 import com.core.util.BigCloudResponse;
 import com.core.util.MapUtils;
+import com.util.AuthenticUser;
 
 
 
@@ -116,6 +120,49 @@ public class ServiceService {
 		return out;
 		
 	}
+	
+	@GET
+    @Path("/stopService/{idInstance}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BigCloudResponse.ServiceDTO REST_stopService(@PathParam("idInstance") Long idInstance ) {
+		
+		BigCloudResponse.ServiceDTO out = null;
+		try{
+			
+			//1. We get the last execution of that service instance
+			List<Execution> list_exc = db.getExecutionDB().findLastExecutionByServiceInstance(idInstance);
+			
+			//The size of list_exc can be 1 or 0
+			//1 means that the service has been executed at least once
+			//0 means that the service has never been executed
+			if(list_exc.size() == 1){
+				//2. Check if the execution associated to this service instance is running or paused.
+				Execution ex = list_exc.get(0);
+				States st = ex.getState();
+				if ( st == Execution.States.RUNNING || st == Execution.States.PAUSED){
+					// In positive case, we stop the execution.
+					Long idJob_iMathCloud = ex.getJob().getIdiMathCloud();
+					BC_User user = ex.getServiceInstance().getUser();
+					AuthenticUser auser = new AuthenticUser(user.getUserName(), user.getPassword());					
+					boolean success = iMathCloud.stopJob(auser, idJob_iMathCloud);
+					ex.setState(Execution.States.CANCELLED);
+					out = new BigCloudResponse.ServiceDTO(ex.getId(), ex.getJob().getId(), ex.getState());					
+				}								
+			}
+			//3. If there is no execution or the last execution is not 'active', out = null is returned
+		}
+		catch(WebApplicationException e){
+			throw e;
+		}
+		catch(Exception e){
+			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		
+		return out;		
+	}
+	
+	
 	
 		
 }

@@ -6,6 +6,7 @@ function submitService_SentimentAnalysis(form_id){
 	var dataPicker_val = $('#datetimepicker_'+id_split[1]).val();
 	var freq = $('#update_freq_'+id_split[1]).val();
 	
+	
 	var check = check_SAParams(terms, dataPicker_val, freq);
 	
 	if (check){
@@ -39,7 +40,12 @@ function submitService_SentimentAnalysis(form_id){
 			data : JSON.stringify(SA_params),
 	        type: "POST",
 	        success: function(service_state) {
-	        	//console.log("success of submitservice");
+	        	$("#submit_" + SA_params.instance).attr("disabled", "disabled");
+				$("#stop_" + SA_params.instance).removeAttr("disabled", "disabled");
+				$("#query_terms_" + SA_params.instance).attr("disabled", "disabled");
+				$("#datetimepicker_" + SA_params.instance).attr("disabled", "disabled");
+				$("#update_freq_" + SA_params.instance).attr("disabled", "disabled");
+	        	service_instances[SA_params.instance].execution = service_state.idExecution;
 	        	refreshJobsTable();
 	        	processServiceState(SA_params, service_state);
 	        },
@@ -54,8 +60,6 @@ function submitService_SentimentAnalysis(form_id){
 		
 	}
 }
-
-
 
 
 function check_SAParams(terms, date, frequency){
@@ -98,15 +102,30 @@ function update_SAServiceUI(params, service_state){
 			break;
 		case STATE.FINISHED_OK:
 			//console.log("The service finished ok");
+			$("#query_terms_" + params.instance).removeAttr("disabled", "disabled");
+			$("#datetimepicker_" + params.instance).removeAttr("disabled", "disabled");
+			$("#update_freq_" + params.instance).removeAttr("disabled", "disabled");
+			$("#submit_" + params.instance).removeAttr("disabled", "disabled");
+			$("#stop_" + params.instance).attr("disabled", "disabled");
 			$('#execution-status_' + params.instance).html('Service Finished');
 			refreshJobsTable();
 			getExecutionParcialData(params, service_state.idExecution);
 			break;
 		case STATE.FINISHED_ERROR:
+			$("#query_terms_" + params.instance).removeAttr("disabled", "disabled");
+			$("#datetimepicker_" + params.instance).removeAttr("disabled", "disabled");
+			$("#update_freq_" + params.instance).removeAttr("disabled", "disabled");
+			$("#submit_" + params.instance).removeAttr("disabled", "disabled");
+			$("#stop_" + params.instance).attr("disabled", "disabled");
 			refreshJobsTable();
 			//console.log("The service finished with errors");
 			break;
 		case STATE.CANCELLED:
+			$("#query_terms_" + params.instance).removeAttr("disabled", "disabled");
+			$("#datetimepicker_" + params.instance).removeAttr("disabled", "disabled");
+			$("#update_freq_" + params.instance).removeAttr("disabled", "disabled");
+			$("#submit_" + params.instance).removeAttr("disabled", "disabled");
+			$("#stop_" + params.instance).attr("disabled", "disabled");
 			$('#execution-status_' + params.instance).html('Service Cancelled');
 			refreshJobsTable();
 			getExecutionParcialData(params, service_state.idExecution);

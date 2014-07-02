@@ -1,3 +1,4 @@
+
 $(document).ready( function() {
 	requestSession();
 	var l = [];
@@ -50,6 +51,18 @@ function requestSession() {
 
 function getLastUserServiceExecutions(userName){
 	
+	//Initialization of service_instances just in the case that 
+	// there is no execution of any service
+	//Now, we only have SA_Form services
+	//TODO: do better, maybe with a rest call
+	var sa_elements = $("[id^='SAForm_']");
+	for (var i = 0; i < sa_elements.length; i++) {		
+		var nameID = $(sa_elements[i]).attr("id");
+		var IDinstance = nameID.split('_')[1];
+		service_instances[IDinstance] = {execution:-1};
+		$("#stop_" + IDinstance).attr("disabled", "disabled");
+	}
+	
 	$.ajax({
         url: "rest/session_service_BC/getActiveExecutions/" + userName,
         cache: false,
@@ -68,7 +81,7 @@ function getLastUserServiceExecutions(userName){
 }
 
 function manageExecutions(executions){
-	
+		
 	var i;
 	for (i = 0; i < executions.length; i++){
 		switch (executions[i].service){
@@ -85,6 +98,14 @@ function manageExecutions(executions){
 					idExecution: executions[i].idExecution,
 					state: executions[i].state
 				};
+				if(execution_state.state == STATE.RUNNING){
+					$("#submit_" + executions[i].idInstance).attr("disabled", "disabled");
+					$("#stop_" + executions[i].idInstance).removeAttr("disabled", "disabled");
+					$("#query_terms_" + executions[i].idInstance).attr("disabled", "disabled");
+					$("#datetimepicker_" + executions[i].idInstance).attr("disabled", "disabled");
+					$("#update_freq_" + executions[i].idInstance).attr("disabled", "disabled");
+				}
+				service_instances[execution_param.instance] = {execution:execution_state.idExecution};
 				processServiceState(execution_param, execution_state);
 				break;
 			default:
