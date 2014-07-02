@@ -68,9 +68,19 @@ public class ServiceService {
 	    	//System.out.println("jsonToMap " + json_params);
 	    	    	
 	    	String service_name = mm.getValue("service");
+	    	Long id_ServiceInstance = Long.parseLong(mm.getValue("instance"));
+	    	
+	    	//Check that the last execution of this service is not running or paused
+	    	List<Execution> lastExecution = db.getExecutionDB().findLastExecutionByServiceInstance(id_ServiceInstance);
+	    	if(lastExecution.size() == 1){	    		
+	    		Execution ex = lastExecution.get(0);
+	    		if(Execution.States.PAUSED == ex.getState() || Execution.States.RUNNING == ex.getState()){
+	    			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+	    		}
+	    		
+	    	}
 	    	switch(service_name){
-	    		case "SAForm":
-	    			Long id_ServiceInstance = Long.parseLong(mm.getValue("instance"));
+	    		case "SAForm":	    			
 	    			String query_terms = mm.getValue("query_terms");
 	    			Long track_time = Long.parseLong(mm.getValue("track_time"));
 	    			String formatted_track_time = mm.getValue("format_track_time");
