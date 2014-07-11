@@ -182,3 +182,34 @@ function plot_SA(params, service_state){
 	$('#execution-status_' + params.instance).show();
 }
 
+function add_SAInstanceCode(idInstance){
+	
+	var code = SA_template;
+	code = code.replace(/xxInstIdxx/g, idInstance);
+	$("#example").append($(code));
+	
+	$("#tabstrip" + idInstance).kendoTabStrip({
+	    animation: {
+	        open: { effects: "fadeIn" }
+	    },
+	    activate: kendo.resize("#tabstrip" + idInstance)
+	});
+	
+	var l = [];
+	for(var xh=0;xh<=23;xh++){
+		for(var xm=0;xm<60;xm+=5){
+			l.push(("0"+xh).slice(-2)+':'+("0"+xm).slice(-2));
+		}
+	}
+	jQuery('#datetimepicker_'+idInstance).datetimepicker({
+		minDate:'-1970/01/01',
+		startDate:'-1970/01/01',
+		allowTimes: l
+		//closeOnDateSelect:true,
+	});
+	
+
+
+
+}
+

@@ -10,6 +10,7 @@ import com.core.model.Execution;
 import com.core.model.Execution.States;
 import com.core.model.Service_Instance;
 import com.core.util.BigCloudResponse.ExecutionDTO;
+import com.core.util.BigCloudResponse.InstanceDTO;
 import com.util.AuthenticUser;
 
 import javax.ejb.Stateful;
@@ -71,6 +72,23 @@ public class SessionService {
 		}
 		return rp;
     }
+	
+	@GET
+	@Path("/getInstances/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<InstanceDTO> REST_requestUserInstances(@PathParam("id") String userName) {
+		
+		List<Service_Instance> instances = db.getServiceInstanceDB().findByUser(userName);
+		List<InstanceDTO> out = new ArrayList<InstanceDTO>();
+		
+		for (Service_Instance inst: instances){
+			InstanceDTO inst_dto = new InstanceDTO(inst.getId(), inst.getUser().getUserName(), inst.getService().getName());
+			out.add(inst_dto);
+		}
+		
+		return out;
+	}
+	
 	
 	@GET
     @Path("/getActiveExecutions/{id}")

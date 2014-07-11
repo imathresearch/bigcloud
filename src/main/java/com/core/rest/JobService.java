@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.api.iMathCloud;
+import com.core.data.MainDB;
+import com.core.model.BC_User;
 import com.util.AuthenticUser;
 
 
@@ -27,6 +30,8 @@ import com.util.AuthenticUser;
 @Stateful
 public class JobService {
 	
+	@Inject private MainDB db;
+	
 	@GET
     @Path("/getJobs_BC/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +40,8 @@ public class JobService {
 		// and that the user is authenticated
 		String jobs = new String();
 		//System.out.println("getJobsBC");
-		AuthenticUser auser = new AuthenticUser(userName, "h1i1m1");
+		BC_User user = db.getBC_UserDB().findById(userName);
+		AuthenticUser auser = new AuthenticUser(user.getUserName(),user.getPassword());
 		try {
 			jobs = iMathCloud.getJobs(auser);
 		}

@@ -137,6 +137,7 @@ public class ServiceService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BigCloudResponse.ServiceDTO REST_stopService(@PathParam("idInstance") Long idInstance ) {
 		
+		
 		BigCloudResponse.ServiceDTO out = null;
 		try{
 			

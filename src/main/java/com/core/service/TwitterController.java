@@ -113,6 +113,8 @@ public class TwitterController extends AbstractController {
 		//2.1 Copy the template file to the correct location, with another name and parameterised
 		String quote_query = "\""+query_terms+"\"";
 		File job_file = SA_createJobFileService(instance, quote_query, track_time, data_file.getName());
+		
+		//System.out.println("Twitter Controller for instance " + id_ServiceInstance + " and user " + instance.getUser().getUserName()+ ". Uploading file " + job_file.getPath());
 				
 		//3. Upload job file to iMathCloud. Get idFile_Job
 		//4. Upload data file to iMathCloud. Get idFile_Data

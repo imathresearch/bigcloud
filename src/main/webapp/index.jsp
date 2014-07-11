@@ -70,8 +70,8 @@
         </section>
         <ul id="menu">
             <li><a href="#service">Services</a></li>
-            <li><a href="#resources">Resources</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <!--li><a href="#resources">Resources</a></li-->
+            <!--li><a href="#faq">FAQ</a></li-->
         </ul>
   	 	<div class="row clearfix">
 			<div class="col-lg-4">
@@ -104,198 +104,7 @@
 		</div>
 	    
 	    
-	    <!--div class="row clearfix">
-			<div class="col-lg-4">
-				<section id="service4" class="well">
-					<h2 class="ra-well-title">Tweeter Service Alert</h2>
-					<div class="row">
-						<div class="col-lg-5 col-sm-2">
-							<img src="bootstrap-integration/images/service_tweeter.png" class="ra-avatar img-responsive" />
-	                	</div>
-						<div class="col-lg-7 col-sm-2" style="height:350px">
-							<span class="ra-first-name">Big Data Service</span>
-							<span class="ra-last-name">Tweeter Alert</span>
-							<div class="ra-position">Demo service for beta release </div>
-						</div>
-	                </div>
-				</section>
-			</div>
-			<div class="col-lg-8">
-				<div id="tabstrip2" class="ra-section">
-					<ul>
-						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
-						<li><span class="km-icon"></span><span class="hidden-xs">Notifications</span></li>
-					</ul>
-					<div><div id="radial-words-mood"></div></div>
-					<div><div id="notifications">
-		              	<div id="appendto" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
-		              	<div id="appendto2" class="k-block" style="float:left;width:500px;height: 150px;margin: 1em 0;overflow: auto;"></div>
-		              	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-		              	<span id="staticNotification"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div-->
-		
-		<div class="row clearfix">
-			<div class="col-lg-4">
-				<section id="service1" class="well">
-					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
-					<div class="row">
-						<div class="col-lg-5 col-sm-2">
-							<img src="bootstrap-integration/images/service_tweeter.png" class="ra-avatar img-responsive" />
-	                	</div>
-						<div class="col-lg-7 col-sm-2" style="height:120px">
-							<span class="ra-first-name">Big Data Service</span>
-							<span class="ra-last-name">Sentiment Analysis</span>
-							<div class="ra-position">Demo service for beta release </div>
-						</div>
-	                </div>
-	                <div class="row" style="height:260px">      	
-	                		<form id="SAForm_1" onsubmit="submitService('SAForm_1'); return false" accept-charset=utf-8>
-	           					<br>			
-						        <div class="form-group">
-						          <label >Query Terms</label>
-						          <input type="text" class="form-control" id="query_terms_1" placeholder="Terms separated by commas">
-						        </div>
-						        <div class="form-group">
-						          <label>Tracking End Date</label>
-						          <input type="text" class="form-control" id="datetimepicker_1" placeholder="Click to open the calendar">
-						        </div>
-						        <div class="form-group">
-						          <label>Data Update Frequency</label>
-						          <input type="text" class="form-control" id="update_freq_1" placeholder="Seconds">
-						        </div>
-						        <br>						       
-								<input type="submit" id="submit_1" value="Submit" class="btn btn-primary" >
-								<button type="button" id="stop_1" onclick="stopService('SAForm_1');" class="btn btn-default btn-stop
-">Stop Service</button>   		
-							</form >			
-					</div>
-				</section>
-			</div>
-			<div class="col-lg-8">
-				<div id="tabstrip3" class="ra-section">
-					<ul>
-						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
-					</ul>
-					<div style="height:430px">
-						<div id="radial-words-mood_1"></div>					
-						<label class="execution-status" id="execution-status_1"></label>
-					</div>
 	
-				</div>
-			</div>
-		</div>
-		
-		<div class="row clearfix">
-			<div class="col-lg-4">
-				<section id="service3" class="well">
-					<h2 class="ra-well-title">Tweeter Sentiment Analysis Service</h2>
-					<div class="row">
-						<div class="col-lg-5 col-sm-2">
-							<img src="bootstrap-integration/images/service_tweeter.png" class="ra-avatar img-responsive" />
-	                	</div>
-						<div class="col-lg-7 col-sm-2" style="height:120px">
-							<span class="ra-first-name">Big Data Service</span>
-							<span class="ra-last-name">Sentiment Analysis</span>
-							<div class="ra-position">Demo service for beta release </div>
-						</div>
-	                </div>
-	                <div class="row" style="height:260px">      	
-	                		<form id="SAForm_2" onsubmit="submitService('SAForm_2'); return false" accept-charset=utf-8>
-	           					<br>			
-						        <div class="form-group">
-						          <label >Query Terms</label>
-						          <input type="text" class="form-control" id="query_terms_2" placeholder="Terms separated by commas">
-						        </div>
-						        <div class="form-group">
-						          <label>Tracking End Date</label>
-						          <input type="text" class="form-control" id="datetimepicker_2" placeholder="Click to open the calendar">
-						        </div>
-						        <div class="form-group">
-						          <label>Data Update Frequency</label>
-						          <input type="text" class="form-control" id="update_freq_2" placeholder="Seconds">
-						        </div>
-						        <br>						       
-								<input type="submit" id="submit_2" value="Submit" class="btn btn-primary">
-								<button type="button" id="stop_2" onclick="stopService('SAForm_2');" class="btn btn-default btn-stop
-" >Stop Service</button>      	
-														
-							</form >			
-					</div>
-				</section>
-			</div>
-			<div class="col-lg-8">
-				<div id="tabstrip4" class="ra-section">
-					<ul>
-						<li class="k-state-active"><span class="km-icon"></span><span class="hidden-xs">Mood Analysis</span></li>
-					</ul>
-					<div style="height:430px">
-						<div id="radial-words-mood_2"></div>					
-						<label class="execution-status" id="execution-status_2"></label>
-					</div>
-	
-				</div>
-			</div>
-		</div>
-
-		
-	
-		
-		<div class="row clearfix">
-			<div class="col-lg-4">
-				<section id="resources" class="well">
-					<h2 class="ra-well-title">Executed Resources</h2>
-					<div class="row">
-						<div class="col-lg-5 col-sm-2">
-							<img src="bootstrap-integration/images/process_running.jpg" class="ra-avatar img-responsive" />
-	                	</div>
-						<div class="col-lg-7 col-sm-2" style="height:350px">
-							<span class="ra-first-name">Resources</span>
-							<span class="ra-last-name">Background Processes</span>
-							<div class="ra-position">Jobs running in iMathCloud </div>
-						</div>
-	                </div>
-				</section>
-			</div>
-			<div class="col-lg-8">
-				<table id="exec-table" class="ra-section" border="0">
-					<colgroup>
-	                    <col style="width:50px"/>
-	                    <col style="width:100px"/>
-	                    <col style="width:400px" />
-	                    <col style="width:200px" />
-	                    <col style="width:200px" />
-	                </colgroup>
-					<thead>
-						<tr>
-							<th> </th>
-							<th>Job#</th>
-							<th>Description</th>
-							<th>Started</th>
-							<th>% Completion</th>
-						</tr>
-					</thead>
-					<tbody id="jobsTBODY">
- 					</tbody>
-				</table>
-			</div>
-		</div>
-		
-	  	<section id="faq" class="well">
-			<h2 class="ra-well-title"><abbr title="Frequently Asked Questions">FAQ</abbr></h2>
-		        <ul id="panelbar" class="ra-well-overlay">
-					<li class="k-state-active">
-						What is BigCloud?
-						<div>
-							<p>BigCloud is a web platform that runs over iMath Cloud and that compiles a set of big data services.</p>
-							<p><a href="http://localhost:8080/iMathCloud">Access to iMath Cloud vi</a> and do it yourself!</p>
-						</div>
-					</li>
-				</ul>
-		</section>
 	</div>
 	<div id="dialogPopup">
 	<div id="contentPopup"></div>
@@ -312,17 +121,17 @@ $("#menu").kendoMenu();
 function resizeTabStripContent() {
     kendo.resize("#tabstrip");
     kendo.resize("#tabstrip2");
-    kendo.resize("#tabstrip3");
-    kendo.resize("#tabstrip4");
+    //kendo.resize("#tabstrip3");
+    //kendo.resize("#tabstrip4");
 }
 
-
+/*
 $("#exec-table").kendoGrid({
     height: 430,
     scrollable: true,
     sortable: true,
     filterable: true,
-});
+});*/
 
 $("#tabstrip").kendoTabStrip({
     animation: {
@@ -338,6 +147,7 @@ $("#tabstrip2").kendoTabStrip({
     activate: resizeTabStripContent
 });
 
+/*
 $("#tabstrip3").kendoTabStrip({
     animation: {
         open: { effects: "fadeIn" }
@@ -351,8 +161,9 @@ $("#tabstrip4").kendoTabStrip({
     },
     activate: resizeTabStripContent
 });
+*/
 
-$("#panelbar").kendoPanelBar();
+//$("#panelbar").kendoPanelBar();
 // resize nested charts when window resizes
 $(window).resize(resizeTabStripContent);
 

@@ -1,6 +1,8 @@
 package com.core.util;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.core.model.Execution.States;
 
@@ -45,6 +47,22 @@ public class BigCloudResponse {
 			this.idInstance = idInstance;
 			this.params = params;
 			this.state = state;
+		}
+		
+	}
+	
+static public class InstanceDTO{
+		
+		public Long idInstance;
+		public String userName;
+		public String serviceName;
+		
+		public InstanceDTO(){}
+		
+		public InstanceDTO(Long idInstance, String userName, String serviceName){
+			this.idInstance = idInstance;
+			this.userName = userName;
+			this.serviceName = serviceName;
 		}
 		
 	}
