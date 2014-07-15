@@ -24,8 +24,8 @@ insert into BC_user (username, firstname, lastname, organization, email, passwor
 insert into Service (id, name, description) values (1 , 'Twitter Sentiment Analysis', 'Analyses the sentiment of tweets that match a specific term');
 insert into Service (id, name, description) values (2 , 'Sales Prediction', 'Predicts the sales of several regions');
 
---insert into Service_Instance (id, idService, idUser) values (3, 1, 'ammartinez');
---insert into Service_Instance (id, idService, idUser) values (4, 1, 'ammartinez');
+insert into Service_Instance (id, idService, idUser) values (3, 1, 'ammartinez');
+insert into Service_Instance (id, idService, idUser) values (4, 1, 'ammartinez');
 insert into Service_Instance (id, idService, idUser) values (5, 1, 'ipinyolTest');
 insert into Service_Instance (id, idService, idUser) values (6, 1, 'ipinyolTest');
 insert into Service_Instance (id, idService, idUser) values (1, 1, 'user52');

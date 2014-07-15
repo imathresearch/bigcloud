@@ -104,6 +104,11 @@ public class TwitterController extends AbstractController {
 		//System.out.println("Running run_SentimentAnalysis");
 		
 		Service_Instance instance = db.getServiceInstanceDB().findById(id_ServiceInstance);
+		
+		if(instance == null){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		
 		AuthenticUser auser = new AuthenticUser(instance.getUser().getUserName(), instance.getUser().getPassword());
 		
 		//1. Create a new empty file that represents the file where the data of the job are going to be stored
@@ -130,7 +135,8 @@ public class TwitterController extends AbstractController {
 		catch (IOException | iMathAPIException e){
 			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
-			
+		
+		
 		//6.Persist the job Object, the result Object and the execution Object
 		BC_Job job = new BC_Job();
 		job.setIdiMathCloud(idJob);
@@ -174,6 +180,9 @@ public class TwitterController extends AbstractController {
 		
 		//1. First we find the imathCloud job associated to the execution
 		Execution ex = db.getExecutionDB().findById(idExecution);
+		if(ex == null){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 		Long imathCloud_idJob = ex.getJob().getIdiMathCloud();
 		
 		//System.out.println("Execution initial state " + ex.getState().ordinal());
@@ -261,6 +270,9 @@ public class TwitterController extends AbstractController {
 		
 		//1. First we find the id of the data file associated with the execution
 		Execution ex = db.getExecutionDB().findById(idExecution);
+		if(ex == null){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);		
+		}
 		Long idFile_data = ex.getResult().getIdFile();
 		
 		//System.out.println("getExecutionParcialData " + idFile_data);
@@ -275,6 +287,9 @@ public class TwitterController extends AbstractController {
 		List<String> content; 
 		try{
 			content = iMathCloud.getFileContent(auser, idFile_data);
+		}
+		catch(iMathAPIException e){
+			throw new WebApplicationException(Response.Status.NOT_FOUND);		
 		}
 		catch(Exception e){
 			throw e;
@@ -293,24 +308,31 @@ public class TwitterController extends AbstractController {
 		return out;
 	}
 	
-	public Map<String, Double> SA_processSentimentData(String raw_data){
+	public Map<String, Double> SA_processSentimentData(String raw_data) throws Exception{
 		
 		MapUtils.MyMap<String, List<Double>> mm = new MapUtils.MyMap<String, List<Double>>();
-		mm.jsonToMap(raw_data);
 		
-		Map<String, Double> output_map = new HashMap<String, Double>();
-		Double count, mean;
-		for (String key : mm.getMap().keySet()){
-			List<Double> list_sentimentScore = mm.getMap().get(key);
-			count = 0D;
-			for(Double f: list_sentimentScore){
-				count += f;
+		try{
+			mm.jsonToMap(raw_data);
+			
+			Map<String, Double> output_map = new HashMap<String, Double>();
+			Double count, mean;
+			for (String key : mm.getMap().keySet()){
+				List<Double> list_sentimentScore = mm.getMap().get(key);
+				count = 0D;
+				for(Double f: list_sentimentScore){
+					count += f;
+				}
+				mean = count/list_sentimentScore.size();
+				output_map.put(key, mean);
 			}
-			mean = count/list_sentimentScore.size();
-			output_map.put(key, mean);
+			
+			return output_map;
 		}
-		
-		return output_map;
+		catch(Exception e){
+			throw e;
+			
+		}
 		
 	}
 	
@@ -363,6 +385,10 @@ public class TwitterController extends AbstractController {
 		
 		return f_dst;
 		
+	}
+	
+	public void setMainDB (MainDB db){
+		this.db = db;
 	}
 
 }

@@ -4,9 +4,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.core.model.Execution.States;
 
 public class BigCloudResponse {
+	
+	static public class SessionDTO{
+		public String message;
+		public String code;
+		public SessionDTO(String message, String code) {
+			this.message = message;
+			this.code = code;
+		}
+	}
 	
 	static public class ServiceDTO{
 		

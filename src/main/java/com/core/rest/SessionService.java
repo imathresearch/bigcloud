@@ -9,6 +9,7 @@ import com.core.model.BC_User;
 import com.core.model.Execution;
 import com.core.model.Execution.States;
 import com.core.model.Service_Instance;
+import com.core.util.BigCloudResponse;
 import com.core.util.BigCloudResponse.ExecutionDTO;
 import com.core.util.BigCloudResponse.InstanceDTO;
 import com.util.AuthenticUser;
@@ -41,7 +42,7 @@ public class SessionService {
 	@GET
     @Path("/new_BGSession/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public StateResponse REST_requestBGSession(@PathParam("id") String userName) {
+    public BigCloudResponse.SessionDTO REST_requestBGSession(@PathParam("id") String userName) {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
 		
@@ -61,16 +62,18 @@ public class SessionService {
 			//LOG.severe("Error creating a session for " + userName);
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
-		StateResponse rp = new StateResponse();
+		BigCloudResponse.SessionDTO out; 
 		if(session){
-			rp.message = "Session created"; 
-			rp.code = "202";
+			String message = "Session created"; 
+			String code = "202"; //ACEPTED
+			out = new BigCloudResponse.SessionDTO(message, code);
 		}
 		else{
-			rp.message = "Session could not be created"; 
-			rp.code = "404";
+			String message = "Session could not be created"; 
+			String code = "404"; //NOT FOUND
+			out = new BigCloudResponse.SessionDTO(message, code);
 		}
-		return rp;
+		return out;
     }
 	
 	@GET
@@ -115,11 +118,15 @@ public class SessionService {
 		}
 	}
 	
-	
-	private class StateResponse {
+	/*
+	public class StateResponse {
 		public String message;
 		public String code;
 		public StateResponse() {}
-	}
+	}*/
 
+	
+	public void setMainDB (MainDB db){
+		this.db = db;
+	}
 }

@@ -37,14 +37,14 @@ public class MapUtils {
 			this.mymap.put(key, value);
 		}
 	
-		public void jsonToMap(String json){
+		public void jsonToMap(String json) throws IOException{
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				this.mymap = mapper.readValue(json, 
 				    new TypeReference<HashMap<T,A>>(){});
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw e;
 			}	
 		}
 		

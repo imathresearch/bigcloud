@@ -28,7 +28,7 @@
        <jboss.bom.version>1.0.2.Final-redhat-1</jboss.bom.version>
       -->
         <wro4j.version>1.4.6</wro4j.version>
-
+		<powermock.version>1.4.9</powermock.version>
     </properties>
 
     <licenses>
@@ -243,6 +243,18 @@
 
         <!-- Needed for running tests (you may also use TestNG) -->
         <dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -250,7 +262,7 @@
 		<dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.8.4</version>
+            <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
         <!-- Optional, but highly recommended -->

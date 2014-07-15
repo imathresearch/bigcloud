@@ -65,13 +65,20 @@ public class ServiceService {
 			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
 	    	MapUtils.MyMap <String, String> mm = new MapUtils.MyMap<String, String>();   	
 	    	mm.jsonToMap(json_params);
-	    	//System.out.println("jsonToMap " + json_params);
 	    	    	
 	    	String service_name = mm.getValue("service");
-	    	Long id_ServiceInstance = Long.parseLong(mm.getValue("instance"));
+	    	String id_ServiceInstance = mm.getValue("instance");
+	    	
+	    	Long idInstance; 
+	    	if (service_name == null || id_ServiceInstance == null){
+	    		throw new WebApplicationException(Response.Status.NOT_FOUND);
+	    	}
+	    	else{
+	    		idInstance = Long.parseLong(id_ServiceInstance);
+	    	}
 	    	
 	    	//Check that the last execution of this service is not running or paused
-	    	List<Execution> lastExecution = db.getExecutionDB().findLastExecutionByServiceInstance(id_ServiceInstance);
+	    	List<Execution> lastExecution = db.getExecutionDB().findLastExecutionByServiceInstance(idInstance);
 	    	if(lastExecution.size() == 1){	    		
 	    		Execution ex = lastExecution.get(0);
 	    		if(Execution.States.PAUSED == ex.getState() || Execution.States.RUNNING == ex.getState()){
@@ -82,12 +89,18 @@ public class ServiceService {
 	    	switch(service_name){
 	    		case "SAForm":	    			
 	    			String query_terms = mm.getValue("query_terms");
-	    			Long track_time = Long.parseLong(mm.getValue("track_time"));
+	    			String track_time = mm.getValue("track_time");
 	    			String formatted_track_time = mm.getValue("format_track_time");
-	    			Long update_freq = Long.parseLong(mm.getValue("update_freq"));	    			
-	    			out = tc.run_SentimentAnalysis(id_ServiceInstance, query_terms, track_time, formatted_track_time, update_freq);
-	    			//System.out.println("Confirmation run_SentimentAnalysis ");
-	    			break;
+	    			String update_freq = mm.getValue("update_freq");
+	    			if(query_terms == null || track_time == null || formatted_track_time == null || update_freq == null){
+	    				throw new WebApplicationException(Response.Status.NOT_FOUND);
+	    			}
+	    			else{
+	    				Long long_track_time = Long.parseLong(track_time);
+	    				Long long_update_freq = Long.parseLong(update_freq);
+	    				out = tc.run_SentimentAnalysis(idInstance, query_terms, long_track_time, formatted_track_time, long_update_freq);
+	    				break;
+	    			}
 	    		default:
 	    			//System.out.println("Unknown Service");
 	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -173,6 +186,18 @@ public class ServiceService {
 		return out;		
 	}
 	
+	
+	public void setTwitterController(TwitterController tc){
+		this.tc = tc;
+	}
+	
+	public void setMainDB (MainDB db){
+		this.db = db;
+	}
+	
+	public void setLogger(Logger log){
+		this.LOG = log;
+	}
 	
 	
 		

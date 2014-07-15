@@ -20,12 +20,28 @@ public class MainDB {
     	return this.bc_userDB;
     }
 	
+	public void setBC_UserDB(BC_UserDB user) {
+    	this.bc_userDB = user;
+    }
+	
 	public ServiceInstanceDB getServiceInstanceDB(){
 		return this.service_instance;
 	}
 	
+	public void setServiceInstanceDB(ServiceInstanceDB inst){
+		this.service_instance = inst;
+	}
+	
 	public ExecutionDB getExecutionDB(){
 		return this.execution;
+	}
+	
+	public void setExecutionDB(ExecutionDB e){
+		this.execution = e;
+	}
+	
+	public void setEntityManager(EntityManager em){
+		this.em = em;
 	}
 	
 	 public void makePersistent(Object obj) throws Exception {

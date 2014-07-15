@@ -43,18 +43,23 @@ public class ExecutionService {
 		
 		try{
 			Execution ex = db.getExecutionDB().findById(idExecution);
-			String name_service = ex.getServiceInstance().getService().getName();
-			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
-			switch(name_service){
-				case "Twitter Sentiment Analysis":
-					out = tc.getExecutionState(idExecution);
-					break;				
-				default:
-					//System.out.println("Unknown Service");
-	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
-					
+			if(ex != null){
+				String name_service = ex.getServiceInstance().getService().getName();
+				BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
+				switch(name_service){
+					case "Twitter Sentiment Analysis":
+						out = tc.getExecutionState(idExecution);
+						break;				
+					default:
+						//System.out.println("Unknown Service");
+		    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+						
+				}
+				return out;
 			}
-			return out;
+			else{
+				throw new WebApplicationException(Response.Status.NOT_FOUND);
+			}
     	
 		}
 		catch(WebApplicationException e){
@@ -105,18 +110,23 @@ public class ExecutionService {
 		
 		try{
 			Execution ex = db.getExecutionDB().findById(idExecution);
-			String name_service = ex.getServiceInstance().getService().getName();
-			BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
-			switch(name_service){
-				case "Twitter Sentiment Analysis":
-					out = tc.getExecutionParcialData(idExecution);
-					break;				
-				default:
-					//System.out.println("Unknown Service");
-	    			throw new WebApplicationException(Response.Status.NOT_FOUND);
-					
+			if(ex != null){
+				String name_service = ex.getServiceInstance().getService().getName();
+				BigCloudResponse.ServiceDTO out = new BigCloudResponse.ServiceDTO();
+				switch(name_service){
+					case "Twitter Sentiment Analysis":
+						out = tc.getExecutionParcialData(idExecution);
+						break;				
+					default:
+						//System.out.println("Unknown Service");
+		    			throw new WebApplicationException(Response.Status.NOT_FOUND);
+						
+				}
+				return out;
 			}
-			return out;
+			else{
+				throw new WebApplicationException(Response.Status.NOT_FOUND);
+			}
     	
 		}
 		catch(WebApplicationException e){
@@ -153,6 +163,14 @@ public class ExecutionService {
 		
 		return success;
 		
+	}
+	
+	public void setMainDB (MainDB db){
+		this.db = db;
+	}
+	
+	public void setTwitterController(TwitterController tc){
+		this.tc = tc;
 	}
 
 }

@@ -41,17 +41,27 @@ public class JobService {
 		String jobs = new String();
 		//System.out.println("getJobsBC");
 		BC_User user = db.getBC_UserDB().findById(userName);
-		AuthenticUser auser = new AuthenticUser(user.getUserName(),user.getPassword());
-		try {
-			jobs = iMathCloud.getJobs(auser);
+		
+		if(user != null){
+			AuthenticUser auser = new AuthenticUser(user.getUserName(),user.getPassword());
+			try {
+				jobs = iMathCloud.getJobs(auser);
+			}
+			catch (Exception e) {
+				//LOG.severe("Error creating a session for " + userName);
+				throw new WebApplicationException(Response.Status.NOT_FOUND);
+			}
+			
+			return jobs;
 		}
-		catch (Exception e) {
-			//LOG.severe("Error creating a session for " + userName);
+		else{
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
-		
-		return jobs;
     }
 	
+	
+	public void setMainDB (MainDB db){
+		this.db = db;
+	}
 
 }
