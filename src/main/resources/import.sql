@@ -17,7 +17,11 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('ammartinez', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@imathresearch.com','h1i1m1');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('ammartinez', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@ammartinez.com','h1i1m1');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('imath', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@imathresearch.com','andreaimath');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('imathTest', 'Andrea', 'Martinez','iMath Research S.L.', 'andrea.mmt84@gmail.com','andreaimathTest');
+
+
 insert into BC_user (username, firstname, lastname, organization, email, password) values ('ipinyolTest', 'Isaac', 'Pinyol','iMath Research S.L.', 'ipinyol@imathresearch.com','test');
 insert into BC_user (username, firstname, lastname, organization, email, password) values ('user52', 'User', 'User','S.L.', 'user@user.com','user52Test');
 
@@ -30,4 +34,8 @@ insert into Service_Instance (id, idService, idUser) values (5, 1, 'ipinyolTest'
 insert into Service_Instance (id, idService, idUser) values (6, 1, 'ipinyolTest');
 insert into Service_Instance (id, idService, idUser) values (1, 1, 'user52');
 insert into Service_Instance (id, idService, idUser) values (2, 1, 'user52');
+insert into Service_Instance (id, idService, idUser) values (7, 1, 'imath');
+insert into Service_Instance (id, idService, idUser) values (8, 1, 'imath');
+insert into Service_Instance (id, idService, idUser) values (9, 1, 'imathTest');
+insert into Service_Instance (id, idService, idUser) values (10, 1, 'imathTest');
 

@@ -38,7 +38,7 @@ public class BC_User implements Serializable {
 	
 	@NotNull
 	@NotEmpty
-	@Size(min = 2, max = 10, message = "2-10")
+	@Size(min = 2, max = 20, message = "2-20")
 	@Email(message = "Invalid format")
 	private String password;
 	
