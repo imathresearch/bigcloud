@@ -8,16 +8,27 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-
+import org.jasypt.hibernate4.type.EncryptedStringType;
 
 /**
  * Entity implementation class for Entity: User
  *
  */
-@Entity
 
+@TypeDef(
+		  name = "encryptedString",
+		  typeClass = EncryptedStringType.class,
+		  parameters = { @Parameter(name = "encryptorRegisteredName", value = "STRING_ENCRYPTOR")
+		  }
+	    )
+
+
+@Entity
 public class BC_User implements Serializable {
 	
 	
@@ -38,8 +49,8 @@ public class BC_User implements Serializable {
 	
 	@NotNull
 	@NotEmpty
-	@Size(min = 2, max = 20, message = "2-20")
-	@Email(message = "Invalid format")
+	@Size(min = 2, max = 200, message = "2-200")
+	@Type(type = "encryptedString")
 	private String password;
 	
 

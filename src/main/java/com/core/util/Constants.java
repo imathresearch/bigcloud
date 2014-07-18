@@ -15,4 +15,11 @@ public class Constants {
 	    static public final String FILE_PARTIAL_DATA = TEMPLATES + "/" + NAME_FILE_PARTIAL_DATA;
 	    
 	    static public final String JOBS_FILES_DIR = ROOT_FILE_SYSTEM + "/jobs_files";
+	    
+	    static public final String BIGCLOUD_HOST = "127.0.0.1";
+	    //static public final String BIGCLOUD_HOST = "158.109.125.112";
+	    
+	    static public final String BIGCLOUD_PORT = "8080"; // in production it must be changed
+	    //static public final String BIGCLOUD_PORT = "80"; // in production it must be changed
+	    
 }

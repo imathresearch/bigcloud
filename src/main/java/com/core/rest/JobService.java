@@ -43,6 +43,7 @@ public class JobService {
 		BC_User user = db.getBC_UserDB().findById(userName);
 		
 		if(user != null){
+			
 			AuthenticUser auser = new AuthenticUser(user.getUserName(),user.getPassword());
 			try {
 				jobs = iMathCloud.getJobs(auser);

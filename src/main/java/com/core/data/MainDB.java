@@ -15,6 +15,7 @@ public class MainDB {
 	@Inject private ServiceInstanceDB service_instance;
 	@Inject private ExecutionDB execution;
 	@Inject private EntityManager em;
+	@Inject private ServiceDB service;
 	
 	public BC_UserDB getBC_UserDB() {
     	return this.bc_userDB;
@@ -42,6 +43,14 @@ public class MainDB {
 	
 	public void setEntityManager(EntityManager em){
 		this.em = em;
+	}
+	
+	public ServiceDB getServiceDB(){
+		return this.service;
+	}
+	
+	public void setServiceDB(ServiceDB s){
+		this.service = s;
 	}
 	
 	 public void makePersistent(Object obj) throws Exception {

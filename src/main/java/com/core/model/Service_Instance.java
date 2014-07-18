@@ -9,7 +9,7 @@ import javax.persistence.*;
  *
  */
 @Entity
-@SequenceGenerator(name="seqInstService", initialValue=5, allocationSize=1)
+@SequenceGenerator(name="seqInstService", initialValue=20, allocationSize=1)
 public class Service_Instance implements Serializable {
 
 	@Id

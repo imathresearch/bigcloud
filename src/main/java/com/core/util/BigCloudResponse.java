@@ -79,4 +79,14 @@ static public class InstanceDTO{
 		
 	}
 
+	static public class NewUserDTO {
+	    public String password;
+	    public String eMail;
+	    public String firstName;
+	    public String lastName;
+	    public String organization;
+	    public String phone1;
+	    public String phone2;
+	}
+
 }
