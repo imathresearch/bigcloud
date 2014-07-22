@@ -1,8 +1,6 @@
 
 $(document).ready( function() {
-	//requestSession();
-	getUserInstances(userName);
-	
+	requestSession();	
 });
 
 
@@ -17,13 +15,8 @@ function requestSession() {
         cache: false,
         dataType: "json",
         type: "GET",
-        success: function(host) {
-        	//console.log("Session confirmed -" );
-        	getUserInstances(userName)
-        	//getLastUserServiceExecutions(userName);
-        	//refreshJobsTable();
-        	//refreshJobsTable();
-    		
+        success: function(host) {        	
+        	getUserInstances(userName);         		
         },
         error: function(error) {
             console.log("error updating table -" );

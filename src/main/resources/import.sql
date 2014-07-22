@@ -17,13 +17,13 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('ammartinez', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@ammartinez.com','h1i1m1');
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('imath', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@imathresearch.com','andreaimath');
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('imathTest', 'Andrea', 'Martinez','iMath Research S.L.', 'andrea.mmt84@gmail.com','andreaimathTest');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('ammartinez', 'Andrea', 'MartinezTT','iMath Research S.L.', 'ammartinez@ammartinez.com','NcIFc4uiQryugnBqeHSAtg==');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('imath', 'Andrea', 'Martinez','iMath Research S.L.', 'ammartinez@imathresearch.com','kNg2mH9QDoEe/15QyPUjZQjzqBIjDyyH');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('imathTest', 'Andrea', 'Martinez','iMath Research S.L.', 'andrea.mmt84@gmail.com','qNsToEtxtq/Ji2zMRwviSzeJ5JcyFDWB');
 
 
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('ipinyolTest', 'Isaac', 'Pinyol','iMath Research S.L.', 'ipinyol@imathresearch.com','test');
-insert into BC_user (username, firstname, lastname, organization, email, password) values ('user52', 'User', 'User','S.L.', 'user@user.com','user52Test');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('ipinyolTest', 'Isaac', 'Pinyol','iMath Research S.L.', 'ipinyol@imathresearch.com','IV0p34cDmXFCzA3p9V7/Hg==');
+insert into BC_user (username, firstname, lastname, organization, email, password) values ('user52', 'User', 'User','S.L.', 'user@user.com','LTfe70E0fKpvIFLyLYoa2bQcuzutOY1j');
 
 insert into Service (id, name, description) values (1 , 'Twitter Sentiment Analysis', 'Analyses the sentiment of tweets that match a specific term');
 insert into Service (id, name, description) values (2 , 'Sales Prediction', 'Predicts the sales of several regions');

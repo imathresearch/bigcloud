@@ -12,6 +12,7 @@ import com.core.model.Service_Instance;
 import com.core.util.BigCloudResponse;
 import com.core.util.BigCloudResponse.ExecutionDTO;
 import com.core.util.BigCloudResponse.InstanceDTO;
+import com.core.util.Encryptor;
 import com.util.AuthenticUser;
 
 import javax.ejb.Stateful;
@@ -24,6 +25,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 
 
@@ -46,7 +49,13 @@ public class SessionService {
 		//TODO: Authenticate the call. Make sure that it is done from index.html
 		// and that the user is authenticated
 		
-		boolean session = false;
+		Encryptor.init();
+		String message = "Session created"; 
+		String code = "202";
+		BigCloudResponse.SessionDTO out = new BigCloudResponse.SessionDTO(message, code);
+		return out;
+		
+		/*boolean session = false;
 		try {
 			
 			BC_User user = db.getBC_UserDB().findById(userName);
@@ -73,7 +82,7 @@ public class SessionService {
 			String code = "404"; //NOT FOUND
 			out = new BigCloudResponse.SessionDTO(message, code);
 		}
-		return out;
+		return out;*/
     }
 	
 	@GET
@@ -81,7 +90,11 @@ public class SessionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<InstanceDTO> REST_requestUserInstances(@PathParam("id") String userName) {
 		
+		//Encryptor.init();
+		
+		System.out.println("Service instance");
 		List<Service_Instance> instances = db.getServiceInstanceDB().findByUser(userName);
+		System.out.println("Service instance list got");
 		List<InstanceDTO> out = new ArrayList<InstanceDTO>();
 		
 		for (Service_Instance inst: instances){

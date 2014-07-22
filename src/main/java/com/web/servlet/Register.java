@@ -13,6 +13,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.hibernate4.encryptor.HibernatePBEEncryptorRegistry;
 
 import com.api.iMathCloud;
+import com.core.util.Encryptor;
 import com.core.util.Mail;
 import com.core.service.UserController;
 
@@ -43,14 +44,15 @@ public class Register extends HttpServlet {
         	String organization = null;
         	
         	// Initialisation of Encryptor to encrypt the user password in the database
-        	System.setProperty("jasypt_password", "jasyptkey");
+        	Encryptor.init();
+        	/*System.setProperty("jasypt_password", "jasyptkey");
         	String passwordEncryptor = System.getProperty("jasypt_password");
 
             StandardPBEStringEncryptor strongEncryptor = new StandardPBEStringEncryptor();
             strongEncryptor.setPassword(passwordEncryptor);
             org.jasypt.hibernate4.encryptor.HibernatePBEEncryptorRegistry registry =
                     org.jasypt.hibernate4.encryptor.HibernatePBEEncryptorRegistry.getInstance();
-            registry.registerPBEStringEncryptor("STRING_ENCRYPTOR", strongEncryptor);
+            registry.registerPBEStringEncryptor("STRING_ENCRYPTOR", strongEncryptor);*/
             
         	userController.createUser(userName, firstName, lastName, organization, eMail, password);
         }
