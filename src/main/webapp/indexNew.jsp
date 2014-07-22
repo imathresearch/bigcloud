@@ -22,6 +22,8 @@
   	
 		<script src="datepicker/js/jquery.datetimepicker.js"></script>
 		<script src="bootstrap-integration/js/bootbox.min.js"></script>
+		<script src="bootstrap-integration/js/bootstrap.js"></script>
+		
   		
         <script src="bootstrap-integration/js/examples.js"></script>
         <script src="js/jobs.js" type="text/javascript"></script>
@@ -41,20 +43,30 @@
 
                 <div id="configurator-wrap" class="col-sm-9 hidden-xs">
                     <div id="configurator" class="row">
-                        <label class="col-sm-4">
+                        <!--label class="col-sm-4">
                         	<div class="description">Last connection</div>
                         	<h1 style="font-size: 15px; padding-top: 0px" ><%= new Date() %></h1>
-                        </label>
+                        </label-->
 
                         <label class="col-sm-4">
                             <div class="description">Current connection</div>
                             <h1 style="font-size: 15px;padding-top: 0px" ><%= new Date() %></h1>
                         </label>
 
-                        <label class="col-sm-2">
+                        <label class="col-sm-3">
                             <div class="description">User</div>
                             <h1 style="font-size: 21px; padding-top: 0px" ><%= request.getUserPrincipal().getName() %></h1>                    
                         </label>
+                        
+                        <label class="col-sm-2">
+                        	<div class="description">Profile</div>
+                        	 <h1 style="font-size: 21px; padding-top: 0px">
+                        	 <button id="profileButton" type="button" class="btn btn-default btn-lg">
+  								<span class="glyphicon glyphicon-edit"></span>
+							</button>
+							</h1>
+                        </label>
+                        
                         <label class="col-sm-2">
                         	<div class="description">LOGOUT</div>
                         	 <h1 style="font-size: 21px; padding-top: 0px" >
@@ -119,6 +131,41 @@
 	<footer>Copyright &copy; 2014 <a href="http://www.imathresearch.com">iMath Research S.L.</a>. All rights reserved.</footer>
 
 <!-- The initial filling stuff of the interactive math prototype -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Profile - Change Password</h4>
+      </div>
+      <div class="modal-body">
+        <form  action="changePassword" method="post" autocomplete="on"> 	    	
+	    	<p> 
+	            <div class="form-group">
+	            <label for="passwordsignup" class="youpasswd" data-icon="p">Your current password </label>
+	            <input id="passwordOld" name="passwordOld" required="required" type="password" placeholder="eg. X8df!90EO" class="form-control"/>
+	            </div>
+	        </p>
+	        <p> 
+	        	<div class="form-group">
+	            <label for="passwordsignup" class="youpasswd" data-icon="p">Your new password </label>
+	            <input id="passwordNew" name="passwordNew" required="required" type="password" placeholder="eg. X8df!90EO" class="form-control"/>
+	        	</div>
+	        </p>
+	        <p> 
+	        	<div class="form-group">
+	            <label for="passwordsignup_confirm" class="youpasswd" data-icon="p">Please confirm your new password </label>
+	            <input id="passwordNewConf" name="passwordNewConf" required="required" type="password" placeholder="eg. X8df!90EO" class="form-control"/>
+	        	</div>
+	        </p>
+			<input type="submit" class="btn btn-primary" value="Sign up"/> 
+		</form>
+      </div>     
+    </div>
+  </div>
+</div>
+
 <script>
 var userName = "<%= request.getUserPrincipal().getName() %>";
 var service_instances =  {};
@@ -135,6 +182,11 @@ function resizeTabStripContent() {
 $("#logoutButton").click(function() {
 	console.log("Click logout button");
 	window.location.href = "logout.jsp";
+});
+
+$("#profileButton").click(function() {
+	console.log("Click profile button");
+	$("#myModal").modal('show');
 });
 
 /*

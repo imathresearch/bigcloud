@@ -9,6 +9,7 @@
       <javaee:url-pattern>/rest/job_service_BC/*</javaee:url-pattern>
       <javaee:url-pattern>/rest/service_service/*</javaee:url-pattern>
       <javaee:url-pattern>/rest/session_service_BC/*</javaee:url-pattern>
+      <javaee:url-pattern>/changePassword</javaee:url-pattern>
     </javaee:web-resource-collection>
     <javaee:auth-constraint>
       <javaee:role-name>WebAppUser</javaee:role-name>
@@ -28,5 +29,13 @@
   <javaee:servlet-mapping>
     <javaee:servlet-name>register</javaee:servlet-name>
     <javaee:url-pattern>/register</javaee:url-pattern>
+  </javaee:servlet-mapping>
+  <javaee:servlet>
+    <javaee:servlet-name>changepassword</javaee:servlet-name>
+    <javaee:servlet-class>com.web.servlet.ChangePassword</javaee:servlet-class>
+  </javaee:servlet>
+  <javaee:servlet-mapping>
+    <javaee:servlet-name>changepassword</javaee:servlet-name>
+    <javaee:url-pattern>/changePassword</javaee:url-pattern>
   </javaee:servlet-mapping>
 </web-app>

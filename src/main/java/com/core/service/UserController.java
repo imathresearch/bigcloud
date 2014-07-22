@@ -43,5 +43,13 @@ public class UserController extends AbstractController {
 		db.makePersistent(inst);
 		
 	}
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void updatePassword(String userName, String password) throws Exception{
+		
+		BC_User user = db.getBC_UserDB().findById(userName);
+		user.setPassword(password);
+				
+	}
 
 }
