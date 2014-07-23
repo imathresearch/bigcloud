@@ -22,13 +22,21 @@
     <javaee:auth-method>BASIC</javaee:auth-method>
     <javaee:realm-name>ApplicationRealm</javaee:realm-name>
   </javaee:login-config>
-   <javaee:servlet>
+  <javaee:servlet>
     <javaee:servlet-name>register</javaee:servlet-name>
     <javaee:servlet-class>com.web.servlet.Register</javaee:servlet-class>
   </javaee:servlet>
   <javaee:servlet-mapping>
     <javaee:servlet-name>register</javaee:servlet-name>
     <javaee:url-pattern>/register</javaee:url-pattern>
+  </javaee:servlet-mapping>
+  <javaee:servlet>
+    <javaee:servlet-name>recoverpassword</javaee:servlet-name>
+    <javaee:servlet-class>com.web.servlet.RecoverPassword</javaee:servlet-class>
+  </javaee:servlet>
+  <javaee:servlet-mapping>
+    <javaee:servlet-name>recoverpassword</javaee:servlet-name>
+    <javaee:url-pattern>/recoverpassword</javaee:url-pattern>
   </javaee:servlet-mapping>
   <javaee:servlet>
     <javaee:servlet-name>changepassword</javaee:servlet-name>

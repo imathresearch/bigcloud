@@ -75,6 +75,29 @@ public class Mail {
         Mail.sendHTMLMail(to, "Welcome to BigCloud", html);
     }
     
+    public void sendRecoverPasswordMail(String to, String username, String newPassword) throws Exception {
+        String html="";
+        InputStream in = this.getClass().getResourceAsStream("recoverPassTemplate.html");
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line;
+        while((line = br.readLine()) != null) {
+            html += line + "\n";
+        }
+        br.close();
+        html = html.replace("[USERNAME]", username);
+        html = html.replace("[PASSWORD]", newPassword);
+        String url = Constants.BIGCLOUD_HOST;
+        if (!Constants.BIGCLOUD_PORT.equals("80")) {
+            url += ":" + Constants.BIGCLOUD_PORT;
+        }
+        url += "/bigCloud";
+        html = html.replace("[URL_BIGCLOUD]", url);
+        Mail.sendHTMLMail(to, "Recover BigCloud Password", html);
+    }
+    
+    
+    
+    
     private static Session getSession() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

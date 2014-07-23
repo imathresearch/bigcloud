@@ -24,6 +24,7 @@
             <section>				
                 <div id="container_demo" >
                     <!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+                    <a class="hiddenanchor" id="torecover"></a>    
                     <a class="hiddenanchor" id="toregister"></a>
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
@@ -45,6 +46,9 @@
                                 <p class="login button"> 
                                     <input type="submit" value="Login" /> 
 								</p>
+								<p>
+								  <a href="#torecover" class="to_register">Did you forget your password ?</a>
+								</p>
                                 <p class="change_link">
 									Not a member yet ?
 									<a href="#toregister" class="to_register">Join us</a>
@@ -60,7 +64,7 @@
                                     <input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="mysuperusername690" />
                                 </p>
                                 <p> 
-                                    <label for="emailsignup" class="youmail" data-icon="e" > Your email</label>
+                                    <label for="emailsignup" class="youmail" data-icon="e" >Your email</label>
                                     <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/> 
                                 </p>
                                 <p> 
@@ -75,6 +79,23 @@
 									<input type="submit" value="Sign up"/> 
 								</p>
                                 <p class="change_link">  
+									Already a member ?
+									<a href="#tologin" class="to_register"> Go and log in </a>
+								</p>
+                            </form>
+                        </div>
+                        
+                        <div id="recover" class="animate form">
+                            <form  action="recoverpassword" method="POST" autocomplete="on"> 
+                                <h1>  BigCloud - Recover password </h1>                                 
+                                <p> 
+                                    <label for="emailsignup" class="youmail" data-icon="e" > Your email</label>
+                                    <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/> 
+                                </p>                               
+                                <p class="signin button"> 
+									<input type="submit" value="Recover"/> 
+								</p>
+                               <p class="change_link">
 									Already a member ?
 									<a href="#tologin" class="to_register"> Go and log in </a>
 								</p>
