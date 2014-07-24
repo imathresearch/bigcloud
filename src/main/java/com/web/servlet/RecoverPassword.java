@@ -33,7 +33,8 @@ public class RecoverPassword extends HttpServlet {
     // imathcloud943793072
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-    
+    	Encryptor.init();
+    	
         String eMail = request.getParameter("emailsignup");
         List<BC_User> users;
 		try {

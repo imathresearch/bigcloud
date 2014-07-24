@@ -3,7 +3,7 @@
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8 lt8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" > <!--<![endif]-->
     <head>
         <meta charset="UTF-8" />
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  -->
@@ -12,10 +12,14 @@
         <meta name="description" content="Login and Registration Form with HTML5 and CSS3" />
         <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
         <meta name="author" content="Codrops" />
+        
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>      
+        <script src="js/loginInitialization.js" type="text/javascript"></script>    
+        
         <link rel="shortcut icon" href="../favicon.ico"> 
         <link rel="stylesheet" type="text/css" href="css/demo.css" />
         <link rel="stylesheet" type="text/css" href="css/style2.css" />
-		<link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
     </head>
     <br><br>
     <body>
@@ -28,7 +32,7 @@
                     <a class="hiddenanchor" id="toregister"></a>
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
-                        <div id="login" class="animate form">
+                        <div id="login" class="animated form in">
                             <form  action="login.jsp" method="POST" autocomplete="on"> 
                                 <h1> BigCloud - Log in </h1> 
                                 <p> 
@@ -47,16 +51,16 @@
                                     <input type="submit" value="Login" /> 
 								</p>
 								<p>
-								  <a href="#torecover" class="to_register">Did you forget your password ?</a>
+								  <a href="javascript:gotobox('recover');" class="to_register">Did you forget your password ?</a>
 								</p>
                                 <p class="change_link">
 									Not a member yet ?
-									<a href="#toregister" class="to_register">Join us</a>
+									<a href="javascript:gotobox('register');" class="to_register">Join us</a>
 								</p>
                             </form>
                         </div>
 
-                        <div id="register" class="animate form">
+                        <div id="register" class="animated form out">
                             <form  action="register" method="POST" autocomplete="on"> 
                                 <h1>  BigCloud - Sign up </h1> 
                                 <p> 
@@ -80,12 +84,12 @@
 								</p>
                                 <p class="change_link">  
 									Already a member ?
-									<a href="#tologin" class="to_register"> Go and log in </a>
+									<a href="javascript:gotobox('login');" class="to_register"> Go and log in </a>
 								</p>
                             </form>
                         </div>
                         
-                        <div id="recover" class="animate form">
+                        <div id="recover" class="animated form out">
                             <form  action="recoverpassword" method="POST" autocomplete="on"> 
                                 <h1>  BigCloud - Recover password </h1>                                 
                                 <p> 
@@ -97,7 +101,7 @@
 								</p>
                                <p class="change_link">
 									Already a member ?
-									<a href="#tologin" class="to_register"> Go and log in </a>
+									<a href="javascript:gotobox('login');"  class="to_register"> Go and log in </a>
 								</p>
                             </form>
                         </div>

@@ -35,14 +35,13 @@ public class BC_UserDB {
 	 
 	 
 	 public List<BC_User> findByMail(String email) throws Exception{
+		 
 		 CriteriaBuilder cb = em1.getCriteriaBuilder();
 		 CriteriaQuery<BC_User> criteria = cb.createQuery(BC_User.class);
 		 Root<BC_User> user = criteria.from(BC_User.class);
 		 Predicate p1 = cb.equal(user.get("eMail"), email);
-		
 		 criteria.select(user).where(p1);
 		 List<BC_User> out = em1.createQuery(criteria).getResultList();
-		 
 		 if (out.size() > 1){
 			 throw new Exception ("Critical: Several users have the same password" );
 		 }
